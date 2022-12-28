@@ -6,5 +6,5 @@ import org.springframework.beans.factory.annotation.Autowired;
 public abstract class AbstractService {
 
     @Autowired
-    protected ServiceTemplate serviceTemplate;
+    protected ServiceTemplate serviceTemplate;//服务模板
 }
