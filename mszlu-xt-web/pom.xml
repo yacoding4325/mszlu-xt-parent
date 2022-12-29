@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>mszlu-xt-parent</artifactId>
+        <groupId>com.mszlu.xt</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>mszlu-xt-web</artifactId>
+    <packaging>pom</packaging>
+    <modules>
+        <module>mszlu-xt-web-dao</module>
+        <module>mszlu-xt-web-domain</module>
+        <module>mszlu-xt-web-model</module>
+        <module>mszlu-xt-web-service</module>
+        <module>mszlu-xt-web-service-impl</module>
+        <module>mszlu-xt-web-api</module>
+    </modules>
+
+    <properties>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.mszlu.xt</groupId>
+                <artifactId>mszlu-xt-web-service-impl</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.mszlu.xt</groupId>
+                <artifactId>mszlu-xt-web-service</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.mszlu.xt</groupId>
+                <artifactId>mszlu-xt-web-model</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.mszlu.xt</groupId>
+                <artifactId>mszlu-xt-web-domain</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.mszlu.xt</groupId>
+                <artifactId>mszlu-xt-web-dao</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.mszlu.xt</groupId>
+                <artifactId>mszlu-xt-common</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+</project>

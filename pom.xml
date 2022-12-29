@@ -10,6 +10,10 @@
     <modules>
         <module>mszlu-xt-common</module>
         <module>mszlu-xt-sso</module>
+        <module>mszlu-xt-admin</module>
+        <module>mszlu-xt-web</module>
+        <module>mszlu-xt-web/mszlu-xt-web-api</module>
+        <module>mszlu-xt-common-pojo</module>
     </modules>
 
 
