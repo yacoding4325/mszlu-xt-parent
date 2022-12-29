@@ -7,15 +7,20 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="mszlu-xt-admin-domain" />
+        <module name="mszlu-xt-admin-dao" />
+        <module name="mszlu-xt-admin-model" />
         <module name="mszlu-xt-sso-model" />
         <module name="mszlu-xt-web-api" />
         <module name="mszlu-xt-web-domain" />
+        <module name="mszlu-xt-admin-api" />
         <module name="mszlu-xt-sso-service-impl" />
         <module name="mszlu-xt-web-service-impl" />
+        <module name="mszlu-xt-admin-service-impl" />
         <module name="mszlu-xt-sso-api" />
         <module name="mszlu-xt-web-model" />
         <module name="mszlu-xt-common-pojo" />
-        <module name="mszlu-xt-admin" />
+        <module name="mszlu-xt-admin-service" />
         <module name="mszlu-xt-sso-dao" />
         <module name="mszlu-xt-sso-service" />
         <module name="mszlu-xt-web-service" />
@@ -28,6 +33,12 @@
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="mszlu-xt-admin" options="-parameters" />
+      <module name="mszlu-xt-admin-api" options="-parameters" />
+      <module name="mszlu-xt-admin-dao" options="-parameters" />
+      <module name="mszlu-xt-admin-domain" options="-parameters" />
+      <module name="mszlu-xt-admin-model" options="-parameters" />
+      <module name="mszlu-xt-admin-service" options="-parameters" />
+      <module name="mszlu-xt-admin-service-impl" options="-parameters" />
       <module name="mszlu-xt-common" options="-parameters" />
       <module name="mszlu-xt-common-pojo" options="-parameters" />
       <module name="mszlu-xt-sso" options="-parameters" />
