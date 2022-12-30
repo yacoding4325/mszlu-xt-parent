@@ -20,6 +20,12 @@
             <groupId>com.mszlu.xt</groupId>
             <artifactId>mszlu-xt-common</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>com.mszlu.xt</groupId>
+            <artifactId>mszlu-xt-common-pojo</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
 </project>

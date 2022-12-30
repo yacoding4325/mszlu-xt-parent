@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mszlu.xt.admin.dao.SubjectMapper">
+
+    <resultMap id="SubjectMap" type="com.mszlu.xt.pojo.Subject">
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="subject_name" property="subjectName" jdbcType="VARCHAR" />
+        <result column="subject_grade" property="subjectGrade" jdbcType="VARCHAR" />
+        <result column="subject_term" property="subjectTerm" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <resultMap id="SubjectUnitMap" type="com.mszlu.xt.pojo.SubjectUnit">
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="subject_id" property="subjectId" jdbcType="BIGINT" />
+        <result column="subject_unit" property="subjectUnit" jdbcType="INTEGER" />
+    </resultMap>
+
+    <sql id="column_no_id">
+        subject_name,subject_grade,subject_term
+    </sql>
+
+    <sql id="all_column">
+        id,subject_name,subject_grade,subject_term
+    </sql>
+
+    <select id="findSubjectListByCourseId" parameterType="long" resultMap="SubjectMap">
+        SELECT <include refid="all_column" />
+        FROM t_subject
+        WHERE id IN
+              (SELECT subject_id FROM t_course_subject WHERE course_id=#{courseId})
+    </select>
+
+</mapper>
