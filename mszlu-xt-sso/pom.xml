@@ -18,6 +18,8 @@
         <module>mszlu-xt-sso-model</module>
         <module>mszlu-xt-sso-service</module>
         <module>mszlu-xt-sso-service-impl</module>
+        <module>mszlu-xt-sso-dubbo-service</module>
+        <module>mszlu-xt-sso-provider</module>
     </modules>
 
     <properties>
