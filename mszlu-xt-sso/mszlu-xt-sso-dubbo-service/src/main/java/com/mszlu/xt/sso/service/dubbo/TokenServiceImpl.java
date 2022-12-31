@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 //将此服务 注册到 nacos 注册中心上去
 //暴露的服务 TokenService.checkToken() 服务的版本号1.0.0
+
 @DubboService(version = "1.0.0",interfaceClass = TokenService.class)
 public class TokenServiceImpl extends AbstractService implements TokenService {
 
