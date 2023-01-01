@@ -25,4 +25,5 @@ public class Course {
 
     private String imageUrl;
 
+
 }
