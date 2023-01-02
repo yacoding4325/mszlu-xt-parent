@@ -12,17 +12,9 @@
         <module>mszlu-xt-sso</module>
         <module>mszlu-xt-admin</module>
         <module>mszlu-xt-web</module>
-        <module>mszlu-xt-web/mszlu-xt-web-api</module>
         <module>mszlu-xt-common-pojo</module>
     </modules>
 
-
-    <properties>
-        <java.version>1.8</java.version>
-        <shardingsphere.version>5.0.0-beta</shardingsphere.version>
-        <weixin.version>3.8.0</weixin.version>
-        <dubbo.version>2.7.8</dubbo.version>
-    </properties>
 
     <packaging>pom</packaging>
 
@@ -32,6 +24,13 @@
         <version>2.5.0</version>
     </parent>
 
+
+    <properties>
+        <java.version>1.8</java.version>
+        <shardingsphere.version>5.0.0-beta</shardingsphere.version>
+        <weixin.version>3.8.0</weixin.version>
+        <dubbo.version>2.7.8</dubbo.version>
+    </properties>
     <!--管理依赖  子模块在使用jar包的时候，不用加版本号-->
     <dependencyManagement>
         <dependencies>

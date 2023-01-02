@@ -9,6 +9,7 @@ import com.mszlu.xt.sso.service.TokenService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.dubbo.config.annotation.DubboReference;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -40,13 +41,16 @@ public class LoginInterceptor implements HandlerInterceptor {
     //请求完成之后，threadLocal就会随着线程销毁
     //相比redis的好处，1. 省内存  3. redis获取信息 需要进行网络连接（开销极大）
 
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         log.info("-------------------login interceptor start-----------------------");
         log.info("request uri:{}",request.getRequestURI());
         log.info("request method:{}",request.getMethod());
         log.info("-------------------login interceptor end-----------------------");
+
         boolean isAuth = false;
+
         if (handler instanceof HandlerMethod){
             //代表拦截的方法是controller的方法
             HandlerMethod handlerMethod = (HandlerMethod) handler;
@@ -57,7 +61,6 @@ public class LoginInterceptor implements HandlerInterceptor {
         if (cookies == null){
             return handlerResponse(response, isAuth);
         }
-
         String token = null;
         for (Cookie cookie : cookies) {
             String name = cookie.getName();
@@ -69,12 +72,10 @@ public class LoginInterceptor implements HandlerInterceptor {
         if (StringUtils.isBlank(token)){
             return handlerResponse(response, isAuth);
         }
-
         Long userId = tokenService.checkToken(token);
         if (userId == null){
             return handlerResponse(response, isAuth);
         }
-
         UserThreadLocal.put(userId);
         return true;
     }

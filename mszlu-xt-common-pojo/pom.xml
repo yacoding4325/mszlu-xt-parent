@@ -19,7 +19,6 @@
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-annotation</artifactId>
-            <version>3.4.1</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>
