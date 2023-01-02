@@ -12,4 +12,11 @@ public interface CourseService {
      */
     CallResult courseList(CourseParam courseParam);
 
+    /**
+     * 根据课程id查询学科详细信息
+     * @param courseParam
+     * @return
+     */
+    CallResult subjectInfo(CourseParam courseParam);
+
 }
