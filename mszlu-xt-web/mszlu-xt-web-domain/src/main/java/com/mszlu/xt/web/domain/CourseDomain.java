@@ -161,4 +161,9 @@ public class CourseDomain {
         }
         return CallResult.success(subjectViewModelList);
     }
+
+    public List<Long> findCourseIdListBySubjectId(Long subjectId) {
+        return courseDomainRepository.findCourseIdListBySubjectId(subjectId);
+    }
+
 }

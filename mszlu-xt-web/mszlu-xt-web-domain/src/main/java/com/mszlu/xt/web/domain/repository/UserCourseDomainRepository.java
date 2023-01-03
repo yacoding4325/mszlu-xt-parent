@@ -8,6 +8,7 @@ import com.mszlu.xt.web.model.params.UserCourseParam;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @Component
 public class UserCourseDomainRepository {
@@ -30,6 +31,14 @@ public class UserCourseDomainRepository {
     public long countUserCourseByCourseId(Long courseId) {
         LambdaQueryWrapper<UserCourse> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(UserCourse::getCourseId,courseId);
+        return userCourseMapper.selectCount(queryWrapper);
+    }
+
+    public Integer countUserCourseInCourseIdList(Long userId, List<Long> courseIdList, long currentTimeMillis) {
+        LambdaQueryWrapper<UserCourse> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(UserCourse::getUserId,userId);
+        queryWrapper.in(UserCourse::getCourseId,courseIdList);
+        queryWrapper.ge(UserCourse::getExpireTime,currentTimeMillis);
         return userCourseMapper.selectCount(queryWrapper);
     }
 

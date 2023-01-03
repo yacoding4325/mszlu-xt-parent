@@ -4,6 +4,8 @@ import com.mszlu.xt.pojo.UserCourse;
 import com.mszlu.xt.web.domain.repository.UserCourseDomainRepository;
 import com.mszlu.xt.web.model.params.UserCourseParam;
 
+import java.util.List;
+
 public class UserCourseDomain {
 
     private UserCourseDomainRepository userCourseDomainRepository;
@@ -21,6 +23,10 @@ public class UserCourseDomain {
 
     public long countUserCourseByCourseId(Long courseId) {
         return userCourseDomainRepository.countUserCourseByCourseId(courseId);
+    }
+
+    public Integer countUserCourseInCourseIdList(Long userId, List<Long> courseIdList, long currentTimeMillis) {
+        return userCourseDomainRepository.countUserCourseInCourseIdList(userId,courseIdList,currentTimeMillis);
     }
 
 }
