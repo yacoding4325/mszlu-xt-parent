@@ -46,4 +46,8 @@ public class SubjectDomainRepository {
         return subjectUnitMapper.selectList(queryWrapper);
     }
 
+    public Subject findSubjectById(Long subjectId) {
+        return subjectMapper.selectById(subjectId);
+    }
+
 }

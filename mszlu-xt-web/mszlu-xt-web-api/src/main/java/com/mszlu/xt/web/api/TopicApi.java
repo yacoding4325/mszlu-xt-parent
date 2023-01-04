@@ -14,8 +14,6 @@ public class TopicApi {
     @Autowired
     private TopicService topicService;
 
-
-
     @RequestMapping(value = "practice",method = RequestMethod.POST)
     public CallResult practice(@RequestBody TopicParam topicParam){
         return topicService.practice(topicParam);
@@ -30,4 +28,5 @@ public class TopicApi {
     public CallResult jump(@RequestBody TopicParam topicParam){
         return topicService.jump(topicParam);
     }
+
 }
