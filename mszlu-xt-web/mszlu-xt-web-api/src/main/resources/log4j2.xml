@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+	日志级别以及优先级排序: OFF > FATAL > ERROR > WARN > INFO > DEBUG > TRACE > ALL
+    status="warn" 日志框架本身的输出日志级别，可以修改为debug
+    monitorInterval="5" 自动加载配置文件的间隔时间，不低于 5秒；生产环境中修改配置文件，是热更新，无需重启应用
+ -->
+<!--
+	自定义命名格式：
+	%d：发生时间，%d{yyyy-MM-dd HH:mm:ss,SSS}，输出类似：2020-02-20 22:10:28,921
+	%F：输出所在的类文件名
+	%t：线程名称
+	%p：日志级别
+	%c：日志消息所在类名
+	%m：消息内容
+	%M：输出所在函数名
+	%x: 输出和当前线程相关联的NDC(嵌套诊断环境),尤其用到像java servlets这样的多客户多线程的应用中。
+	%l：执行的函数名(类名称:行号）com.core.LogHelper.aroundService(LogHelper.java:32)
+	%n：换行
+	%i：从1开始自增数字
+	%-5level：输出日志级别，-5表示左对齐并且固定输出5个字符，如果不足在右边补0
+-->
+<configuration status="WARN" monitorInterval="5">
+    <!--
+        集中配置属性进行管理
+        使用时通过:${name}
+    -->
+    <properties>
+        <property name="LOG_HOME">G:/logs/xt</property>
+        <property name="PATTERN">%d %highlight{%-5level}{ERROR=Bright RED, WARN=Bright Yellow, INFO=Bright Green, DEBUG=Bright Cyan, TRACE=Bright White} %style{[%t]}{bright,magenta} %style{%c{1.}.%M(%L)}{cyan}: %msg%n</property>
+        <property name="FILE_PATTERN">%d %-5level [%t] %c{1.}.%M(%L): %m%n</property>
+    </properties>
+
+    <!-- 日志处理 -->
+    <Appenders>
+        <!-- 控制台输出 appender，SYSTEM_OUT输出黑色，SYSTEM_ERR输出红色 在vm配置-Dlog4j.skipJansi=false可开启彩色日志-->
+        <Console name="Console" target="SYSTEM_OUT">
+            <!-- 设置控制台只输出INFO及以上级别的信息(onMatch),其他的直接拒绝(onMismatch) -->
+            <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="${PATTERN}" />
+        </Console>
+
+        <!-- 日志文件输出 appender 所有的日志信息会打印到此文件中，append=false每次启动程序会自动清空 -->
+        <File name="file" fileName="${LOG_HOME}/xt.log" append="true">
+            <!-- 设置控制台只输出INFO及以上级别的信息(onMatch),其他的直接拒绝(onMismatch) -->
+            <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="${FILE_PATTERN}" />
+        </File>
+
+        <Async name="Async">
+            <AppenderRef ref="file" />
+        </Async>
+
+        <!-- 日志文件输出 appender 业务日志 一般打印domain中的日志 -->c
+        <!--RollingFile 滚动文件，达到指定条件 生成新的文件进行记录-->
+        <RollingFile name="business" fileName="${LOG_HOME}/business/business.log" filePattern="${LOG_HOME}/business/business_%d{yyyy-MM-dd HH}.log">
+            <PatternLayout pattern="${FILE_PATTERN}" />
+
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+                <!-- 按大小划分 -->
+                <SizeBasedTriggeringPolicy size="100MB"/>
+            </Policies>
+            <!-- DefaultRolloverStrategy属性如不设置，则默认为最多同一文件夹下24个文件，超过该数量，会滚动删除前面的记录 -->
+            <DefaultRolloverStrategy max="24"/>
+        </RollingFile>
+
+        <Async name="Async-Business">
+            <AppenderRef ref="business" />
+        </Async>
+
+        <RollingFile name="service" fileName="${LOG_HOME}/service/service.log" filePattern="${LOG_HOME}/service/service_%d{yyyy-MM-dd HH}.log">
+            <PatternLayout pattern="${FILE_PATTERN}" />
+
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+                <!-- 按大小划分 -->
+                <SizeBasedTriggeringPolicy size="100MB"/>
+            </Policies>
+            <!-- DefaultRolloverStrategy属性如不设置，则默认为最多同一文件夹下7个文件，超过该数量，会滚动删除前面的记录 -->
+            <DefaultRolloverStrategy max="24"/>
+        </RollingFile>
+
+        <Async name="Async-Service">
+            <AppenderRef ref="service" />
+        </Async>
+
+        <RollingFile name="controller" fileName="${LOG_HOME}/controller/controller.log" filePattern="${LOG_HOME}/controller/controller_%d{yyyy-MM-dd HH}.log">
+            <PatternLayout pattern="${FILE_PATTERN}" />
+
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+                <!-- 按大小划分 -->
+                <SizeBasedTriggeringPolicy size="100MB"/>
+            </Policies>
+            <!-- DefaultRolloverStrategy属性如不设置，则默认为最多同一文件夹下7个文件，超过该数量，会滚动删除前面的记录 -->
+            <DefaultRolloverStrategy max="24"/>
+        </RollingFile>
+
+        <Async name="Async-Controller">
+            <AppenderRef ref="controller" />
+        </Async>
+
+
+        <RollingFile name="common" fileName="${LOG_HOME}/common/common.log" filePattern="${LOG_HOME}/common/common_%d{yyyy-MM-dd HH}.log">
+            <PatternLayout pattern="${FILE_PATTERN}" />
+
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+                <!-- 按大小划分 -->
+                <SizeBasedTriggeringPolicy size="100MB"/>
+            </Policies>
+            <!-- DefaultRolloverStrategy属性如不设置，则默认为最多同一文件夹下7个文件，超过该数量，会滚动删除前面的记录 -->
+            <DefaultRolloverStrategy max="24"/>
+        </RollingFile>
+
+        <Async name="Async-Common">
+            <AppenderRef ref="common" />
+        </Async>
+
+        <RollingFile name="error" fileName="${LOG_HOME}/error/error.log" filePattern="${LOG_HOME}/error/error_%d{yyyy-MM-dd}.log">
+            <PatternLayout pattern="${FILE_PATTERN}" />
+            <Filters>
+                <ThresholdFilter level="ERROR" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+                <!-- 按大小划分 -->
+                <SizeBasedTriggeringPolicy size="100MB"/>
+            </Policies>
+            <!-- DefaultRolloverStrategy属性如不设置，则默认为最多同一文件夹下7个文件，超过该数量，会滚动删除前面的记录 -->
+            <DefaultRolloverStrategy max="24"/>
+        </RollingFile>
+
+        <Async name="Async-Error">
+            <AppenderRef ref="error" />
+        </Async>
+    </Appenders>
+
+    <!-- logger 定义 -->
+    <Loggers>
+        <!-- 自定义 logger 对象
+            includeLocation="false" 关闭日志记录的行号信息，开启的话会严重影响异步输出的性能
+            additivity="false" 不再继承 rootlogger对象
+         -->
+        <AsyncLogger name="com.mszlu" level="INFO" includeLocation="false" additivity="false">
+            <!-- 指定日志使用的处理器 -->
+            <AppenderRef ref="Console" />
+            <AppenderRef ref="Async-Error" />
+        </AsyncLogger>
+        <AsyncLogger name="com.mszlu.xt.web.api" level="INFO" includeLocation="false" additivity="false">
+            <AppenderRef ref="Async-Controller" />
+            <AppenderRef ref="Async" />
+            <AppenderRef ref="Console" />
+            <AppenderRef ref="Async-Error" />
+        </AsyncLogger>
+        <AsyncLogger name="com.mszlu.xt.web.handler" level="INFO" includeLocation="false" additivity="false">
+            <AppenderRef ref="Async-Controller" />
+            <AppenderRef ref="Async" />
+            <AppenderRef ref="Console" />
+            <AppenderRef ref="Async-Error" />
+        </AsyncLogger>
+        <AsyncLogger name="com.mszlu.xt.web.service" level="INFO" includeLocation="false" additivity="false">
+            <AppenderRef ref="Async-Service" />
+            <AppenderRef ref="Async" />
+            <AppenderRef ref="Console" />
+            <AppenderRef ref="Async-Error" />
+        </AsyncLogger>
+        <AsyncLogger name="com.mszlu.xt.web.domain" level="INFO" includeLocation="false" additivity="false">
+            <AppenderRef ref="Async-Business" />
+            <AppenderRef ref="Async" />
+            <AppenderRef ref="Console" />
+            <AppenderRef ref="Async-Error" />
+        </AsyncLogger>
+        <AsyncLogger name="com.mszlu.common" level="INFO" includeLocation="false" additivity="false">
+            <AppenderRef ref="Async-Common" />
+            <AppenderRef ref="Async" />
+            <AppenderRef ref="Console" />
+            <AppenderRef ref="Async-Error" />
+        </AsyncLogger>
+        <!-- 使用 rootLogger 配置 日志级别 level="trace" -->
+        <Root level="trace">
+            <!-- 指定日志使用的处理器 -->
+            <AppenderRef ref="Console" />
+            <!-- 使用异步 appender -->
+            <AppenderRef ref="Async" />
+
+            <AppenderRef ref="Async-Error" />
+        </Root>
+    </Loggers>
+</configuration>

@@ -26,6 +26,7 @@
         <module name="mszlu-xt-sso-dao" />
         <module name="mszlu-xt-sso-service" />
         <module name="mszlu-xt-web-service" />
+        <module name="mszlu-xt-log" />
         <module name="mszlu-xt-sso-domain" />
         <module name="mszlu-xt-common" />
         <module name="mszlu-xt-web-dao" />
@@ -43,6 +44,7 @@
       <module name="mszlu-xt-admin-service-impl" options="-parameters" />
       <module name="mszlu-xt-common" options="-parameters" />
       <module name="mszlu-xt-common-pojo" options="-parameters" />
+      <module name="mszlu-xt-log" options="-parameters" />
       <module name="mszlu-xt-sso" options="-parameters" />
       <module name="mszlu-xt-sso-api" options="-parameters" />
       <module name="mszlu-xt-sso-dao" options="-parameters" />

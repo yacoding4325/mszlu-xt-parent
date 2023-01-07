@@ -3,25 +3,36 @@
          xmlns="http://maven.apache.org/POM/4.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
+
   <parent>
     <groupId>com.mszlu.xt</groupId>
     <artifactId>mszlu-xt-sso</artifactId>
     <version>1.0-SNAPSHOT</version>
   </parent>
+
   <artifactId>mszlu-xt-sso-api</artifactId>
+
   <dependencies>
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
     </dependency>
+
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-test</artifactId>
       <scope>test</scope>
     </dependency>
+
     <dependency>
       <groupId>com.mszlu.xt</groupId>
       <artifactId>mszlu-xt-sso-service-impl</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.data</groupId>
+      <artifactId>spring-data-mongodb</artifactId>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 </project>
