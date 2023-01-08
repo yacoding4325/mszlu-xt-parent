@@ -11,6 +11,7 @@ import com.mszlu.xt.pojo.Subject;
 import com.mszlu.xt.pojo.UserCourse;
 import com.mszlu.xt.pojo.UserHistory;
 import com.mszlu.xt.web.domain.repository.CourseDomainRepository;
+import com.mszlu.xt.web.model.CourseDetailModel;
 import com.mszlu.xt.web.model.CourseViewModel;
 import com.mszlu.xt.web.model.SubjectModel;
 import com.mszlu.xt.web.model.SubjectViewModel;
@@ -166,4 +167,30 @@ public class CourseDomain {
         return courseDomainRepository.findCourseIdListBySubjectId(subjectId);
     }
 
+    public CallResult<Object> courseDetail() {
+        Long courseId = this.courseParam.getCourseId();
+        Course course = this.courseDomainRepository.findCourseById(courseId);
+        if (course == null){
+            return CallResult.fail(BusinessCodeEnum.CHECK_PARAM_NO_RESULT.getCode(),"课程不存在");
+        }
+        CourseDetailModel courseDetailModel = new CourseDetailModel();
+        courseDetailModel.setCourseId(courseId);
+        courseDetailModel.setCourseName(course.getCourseName());
+        courseDetailModel.setCourseTime(course.getOrderTime());
+        courseDetailModel.setPrice(course.getCourseZhePrice());
+        //根据课程id 查询课程关联的科目详情
+        List<SubjectModel> subjectModelList = this.courseDomainRepository.createSubjectDomain(null).findSubjectListByCourseId(courseId);
+        StringBuilder subjectStr = new StringBuilder();
+        for (SubjectModel subject: subjectModelList) {
+            subjectStr.append(subject.getSubjectName())
+                    .append(" ")
+                    .append(subject.getSubjectGrade())
+                    .append(" ")
+                    .append(subject.getSubjectTerm())
+                    .append(",");
+        }
+        String subjectInfo = subjectStr.toString().substring(0, subjectStr.toString().length() - 1);
+        courseDetailModel.setSubjectInfo(subjectInfo);
+        return CallResult.success(courseDetailModel);
+    }
 }

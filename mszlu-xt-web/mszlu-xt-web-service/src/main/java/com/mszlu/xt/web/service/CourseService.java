@@ -19,4 +19,11 @@ public interface CourseService {
      */
     CallResult subjectInfo(CourseParam courseParam);
 
+    /**
+     * 根据课程id，将课程的信息展示出来，供用户查看
+     * @param courseParam
+     * @return
+     */
+    CallResult courseDetail(CourseParam courseParam);
+
 }
