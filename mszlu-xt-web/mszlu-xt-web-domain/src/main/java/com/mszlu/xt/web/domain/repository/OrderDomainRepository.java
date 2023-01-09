@@ -3,6 +3,7 @@ package com.mszlu.xt.web.domain.repository;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.mszlu.xt.common.wx.config.WxPayConfiguration;
 import com.mszlu.xt.pojo.Order;
 import com.mszlu.xt.web.dao.OrderMapper;
 import com.mszlu.xt.web.domain.CouponDomain;
@@ -26,6 +27,9 @@ import org.springframework.stereotype.Component;
 @SuppressWarnings({"all"})
 @Component
 public class OrderDomainRepository {
+
+    @Autowired
+    public WxPayConfiguration wxPayConfiguration;
 
     @Autowired
     private OrderMapper orderMapper;
@@ -73,6 +77,13 @@ public class OrderDomainRepository {
         updateWrapper.eq(Order::getId,order.getId());
         updateWrapper.set(Order::getPayOrderId,order.getPayOrderId());
         this.orderMapper.update(null, updateWrapper);
+    }
+
+    public void updatePayOrderId(Order order) {
+        LambdaUpdateWrapper<Order> updateWrapper = Wrappers.lambdaUpdate();
+        updateWrapper.eq(Order::getId,order.getId());
+        updateWrapper.set(Order::getPayOrderId,order.getPayOrderId());
+        this.orderMapper.update(null,updateWrapper);
     }
 
 }

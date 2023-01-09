@@ -27,4 +27,9 @@ public class OrderApi {
         return orderService.submitOrder(orderParam);
     }
 
+    @PostMapping("wxPay")
+    public CallResult wxPay(@RequestBody OrderParam orderParam) {
+        return orderService.wxPay(orderParam);
+    }
+
 }
