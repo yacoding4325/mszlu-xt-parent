@@ -18,7 +18,9 @@ import com.mszlu.xt.web.model.params.OrderParam;
 import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author yaCoding
@@ -92,6 +94,16 @@ public class OrderDomain {
             subject = new StringBuilder(subject.substring(0,subject.toString().length() - 1));
         }
         orderDisplayModel.setSubject(subject.toString());
+        //逻辑：当订单创建成功，发送一条延时消息，延时30分钟进行消费，在消费的时候进行判断，
+        // 如果订单未支付就进行取消操作，如果有使用优惠券，将优惠券的状态回退
+
+        //订单创建成功了,发送延时消息
+        //16代表30分钟 延迟30m执行消费 3代表10秒
+        Map<String,String> map = new HashMap<>();
+        map.put("orderId",order.getOrderId());
+        //在消费方进行消费的时候，订单是否要取消 多长满足取消 以 time为准 s
+        map.put("time","1800");
+        this.orderDomainRepository.mqService.sendDelayMessage("create_order_delay",map,16);
         return CallResult.success(orderDisplayModel);
 
     }

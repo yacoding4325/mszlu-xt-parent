@@ -33,4 +33,8 @@ public class CouponDomain {
     public void updateCouponStatus(UserCoupon userCoupon) {
         couponDomainRepository.updateCouponStatus(userCoupon);
     }
+
+    public void updateCouponNoUseStatus(Long userId, Long couponId, int frontStatusCode) {
+        couponDomainRepository.updateCouponNoUseStatus(userId,couponId,frontStatusCode);
+    }
 }

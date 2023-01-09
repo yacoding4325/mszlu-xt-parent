@@ -20,13 +20,11 @@ import java.util.List;
 @Component
 public class CouponDomainRepository {
 
-
     @Resource
     private UserCouponMapper userCouponMapper;
 
     @Resource
     private CouponMapper couponMapper;
-
 
     public CouponDomain createDomain(CouponParam couponParam) {
         return new CouponDomain(this,couponParam);
@@ -59,6 +57,15 @@ public class CouponDomainRepository {
         LambdaUpdateWrapper<UserCoupon> updateWrapper = Wrappers.lambdaUpdate();
         updateWrapper.eq(UserCoupon::getId,userCoupon.getId());
         updateWrapper.set(UserCoupon::getStatus,userCoupon.getStatus());
+        this.userCouponMapper.update(null, updateWrapper);
+    }
+
+    public void updateCouponNoUseStatus(Long userId, Long couponId, int frontStatusCode) {
+        LambdaUpdateWrapper<UserCoupon> updateWrapper = Wrappers.lambdaUpdate();
+        updateWrapper.eq(UserCoupon::getCouponId,couponId);
+        updateWrapper.eq(UserCoupon::getUserId,userId);
+        updateWrapper.eq(UserCoupon::getStatus,frontStatusCode);
+        updateWrapper.set(UserCoupon::getStatus,0);
         this.userCouponMapper.update(null, updateWrapper);
     }
 
