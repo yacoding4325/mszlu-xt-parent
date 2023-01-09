@@ -31,4 +31,11 @@ public interface OrderService {
      */
     CallResult notifyOrder(String xmlData);
 
+    /**
+     * 根据订单id 查询订单的详情
+     * @param orderParam
+     * @return
+     */
+    CallResult findOrder(OrderParam orderParam);
+
 }

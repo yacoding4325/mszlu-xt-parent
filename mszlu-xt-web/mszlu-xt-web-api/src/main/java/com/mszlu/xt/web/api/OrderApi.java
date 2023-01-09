@@ -5,6 +5,7 @@ import com.mszlu.xt.common.model.CallResult;
 import com.mszlu.xt.web.model.params.OrderParam;
 import com.mszlu.xt.web.service.OrderService;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -43,4 +44,8 @@ public class OrderApi {
         return WxPayNotifyResponse.fail("失败");
     }
 
+    @PostMapping("findOrder")
+    public CallResult findOrder(@RequestBody OrderParam orderParam){
+        return orderService.findOrder(orderParam);
+    }
 }
