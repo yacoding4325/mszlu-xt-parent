@@ -43,4 +43,9 @@ public class CourseApi {
         return courseService.courseDetail(courseParam);
     }
 
+   //优惠劵
+   @PostMapping(value = "myCoupon")
+   public CallResult myCoupon(@RequestBody CourseParam courseParam){
+       return courseService.myCoupon(courseParam);
+   }
 }

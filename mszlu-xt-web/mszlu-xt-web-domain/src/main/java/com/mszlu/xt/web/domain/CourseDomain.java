@@ -6,24 +6,19 @@ import com.mszlu.xt.common.login.UserThreadLocal;
 import com.mszlu.xt.common.model.BusinessCodeEnum;
 import com.mszlu.xt.common.model.CallResult;
 import com.mszlu.xt.common.model.ListPageModel;
-import com.mszlu.xt.pojo.Course;
-import com.mszlu.xt.pojo.Subject;
-import com.mszlu.xt.pojo.UserCourse;
-import com.mszlu.xt.pojo.UserHistory;
+import com.mszlu.xt.pojo.*;
 import com.mszlu.xt.web.domain.repository.CourseDomainRepository;
-import com.mszlu.xt.web.model.CourseDetailModel;
-import com.mszlu.xt.web.model.CourseViewModel;
-import com.mszlu.xt.web.model.SubjectModel;
-import com.mszlu.xt.web.model.SubjectViewModel;
+import com.mszlu.xt.web.model.*;
 import com.mszlu.xt.web.model.enums.HistoryStatus;
 import com.mszlu.xt.web.model.params.CourseParam;
 import com.mszlu.xt.web.model.params.SubjectParam;
+import com.mszlu.xt.web.model.params.CouponParam;
 import com.mszlu.xt.web.model.params.UserCourseParam;
-import jdk.nashorn.internal.codegen.CompilerConstants;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.springframework.beans.BeanUtils;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -193,4 +188,58 @@ public class CourseDomain {
         courseDetailModel.setSubjectInfo(subjectInfo);
         return CallResult.success(courseDetailModel);
     }
+
+    public CallResult<Object> myCoupon() {
+        /**
+         * 1. 根据课程和当前的登录用户id 查询用户所有可用的优惠券
+         * 2. 判断优惠券是否可用 开始时间 不等于-1 过期时间 不等于-1
+         */
+        Long userId = UserThreadLocal.get();
+        Long courseId = this.courseParam.getCourseId();
+        Course course = this.courseDomainRepository.findCourseById(courseId);
+        if (course == null){
+            return CallResult.fail(BusinessCodeEnum.CHECK_PARAM_NO_RESULT.getCode(),"课程不存在");
+        }
+        List<UserCoupon> userCouponList = this.courseDomainRepository.createUserCouponDomain(new CouponParam()).findUserCouponByUserId(userId);
+        List<UserCouponModel> userCouponModelList = new ArrayList<>();
+        for (UserCoupon userCoupon : userCouponList) {
+            Long startTime = userCoupon.getStartTime();
+            Long expireTime = userCoupon.getExpireTime();
+            long currentTimeMillis = System.currentTimeMillis();
+            if (startTime != -1 && startTime > currentTimeMillis){
+                //时间没到 不能用
+                continue;
+            }
+            if (expireTime != -1 && expireTime < currentTimeMillis){
+                //已过期不能用
+                continue;
+            }
+            //判断满减
+            Long couponId = userCoupon.getCouponId();
+            Coupon coupon = this.courseDomainRepository.createUserCouponDomain(null).findCouponById(couponId);
+            if (coupon == null){
+                continue;
+            }
+            Integer status = coupon.getStatus();
+            if (2 == status){
+                continue;
+            }
+            Integer disStatus = coupon.getDisStatus();
+            if (1 == disStatus){
+                //需要满足满减条件
+                BigDecimal max = coupon.getMax();
+                BigDecimal courseZhePrice = course.getCourseZhePrice();
+                if (max.compareTo(courseZhePrice) > 0){
+                    continue;
+                }
+            }
+            UserCouponModel userCouponModel = new UserCouponModel();
+            userCouponModel.setCouponId(couponId);
+            userCouponModel.setAmount(coupon.getPrice());
+            userCouponModel.setName(coupon.getName());
+            userCouponModelList.add(userCouponModel);
+        }
+        return CallResult.success(userCouponModelList);
+    }
+
 }

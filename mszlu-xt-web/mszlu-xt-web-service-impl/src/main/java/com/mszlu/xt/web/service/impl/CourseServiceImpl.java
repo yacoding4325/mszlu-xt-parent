@@ -1,7 +1,9 @@
 package com.mszlu.xt.web.service.impl;
 
+import com.mszlu.xt.common.login.UserThreadLocal;
 import com.mszlu.xt.common.model.CallResult;
 import com.mszlu.xt.common.service.AbstractTemplateAction;
+import com.mszlu.xt.pojo.Course;
 import com.mszlu.xt.web.domain.CourseDomain;
 import com.mszlu.xt.web.domain.repository.CourseDomainRepository;
 import com.mszlu.xt.web.model.params.CourseParam;
@@ -53,6 +55,17 @@ public class CourseServiceImpl extends AbstractService implements CourseService 
             @Override
             public CallResult<Object> doAction() {
                 return courseDomain.courseDetail();
+            }
+        });
+    }
+
+    @Override
+    public CallResult myCoupon(CourseParam courseParam) {
+        CourseDomain courseDomain = this.courseDomainRepository.createDomain(courseParam);
+        return this.serviceTemplate.executeQuery(new AbstractTemplateAction<Object>() {
+            @Override
+            public CallResult<Object> doAction() {
+                return courseDomain.myCoupon();
             }
         });
     }

@@ -9,14 +9,8 @@ import com.mszlu.xt.pojo.CourseSubject;
 import com.mszlu.xt.pojo.UserHistory;
 import com.mszlu.xt.web.dao.CourseMapper;
 import com.mszlu.xt.web.dao.CourseSubjectMapper;
-import com.mszlu.xt.web.domain.CourseDomain;
-import com.mszlu.xt.web.domain.SubjectDomain;
-import com.mszlu.xt.web.domain.UserCourseDomain;
-import com.mszlu.xt.web.domain.UserHistoryDomain;
-import com.mszlu.xt.web.model.params.CourseParam;
-import com.mszlu.xt.web.model.params.SubjectParam;
-import com.mszlu.xt.web.model.params.UserCourseParam;
-import com.mszlu.xt.web.model.params.UserHistoryParam;
+import com.mszlu.xt.web.domain.*;
+import com.mszlu.xt.web.model.params.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -41,6 +35,9 @@ public class CourseDomainRepository {
 
     @Autowired
     private CourseSubjectMapper courseSubjectMapper;
+
+    @Autowired
+    private CouponDomainRepository couponDomainRepository;
 
     public CourseDomain createDomain(CourseParam courseParam){
         return new CourseDomain(this,courseParam);
@@ -84,6 +81,10 @@ public class CourseDomainRepository {
         queryWrapper.eq(CourseSubject::getSubjectId,subjectId);
         List<CourseSubject> courseSubjects = this.courseSubjectMapper.selectList(queryWrapper);
         return courseSubjects.stream().map(CourseSubject::getCourseId).collect(Collectors.toList());
+    }
+
+    public CouponDomain createUserCouponDomain(CouponParam couponParam) {
+        return this.couponDomainRepository.createDomain(couponParam);
     }
 
 }
