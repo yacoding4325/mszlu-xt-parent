@@ -1,5 +1,6 @@
 package com.mszlu.xt.web.api;
 
+import com.github.binarywang.wxpay.bean.notify.WxPayNotifyResponse;
 import com.mszlu.xt.common.model.CallResult;
 import com.mszlu.xt.web.model.params.OrderParam;
 import com.mszlu.xt.web.service.OrderService;
@@ -30,6 +31,16 @@ public class OrderApi {
     @PostMapping("wxPay")
     public CallResult wxPay(@RequestBody OrderParam orderParam) {
         return orderService.wxPay(orderParam);
+    }
+
+    @PostMapping("notify")
+    public String notifyOrder(@RequestBody String xmlData){
+        log.info("notify 数据：{}",xmlData);
+        CallResult callResult = orderService.notifyOrder(xmlData);
+        if (callResult.isSuccess()){
+            return WxPayNotifyResponse.success("成功");
+        }
+        return WxPayNotifyResponse.fail("失败");
     }
 
 }

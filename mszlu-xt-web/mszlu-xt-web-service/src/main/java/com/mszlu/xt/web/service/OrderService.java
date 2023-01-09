@@ -24,4 +24,11 @@ public interface OrderService {
      */
     CallResult wxPay(OrderParam orderParam);
 
+    /**
+     * 微信支付回调 在此接口 处理订单支付成功的相关操作
+     * @param xmlData
+     * @return
+     */
+    CallResult notifyOrder(String xmlData);
+
 }

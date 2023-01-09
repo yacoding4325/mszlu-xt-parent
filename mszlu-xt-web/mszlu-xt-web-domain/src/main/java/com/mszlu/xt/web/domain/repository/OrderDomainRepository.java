@@ -5,26 +5,24 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.mszlu.xt.common.wx.config.WxPayConfiguration;
 import com.mszlu.xt.pojo.Order;
+import com.mszlu.xt.pojo.OrderTrade;
 import com.mszlu.xt.web.dao.OrderMapper;
-import com.mszlu.xt.web.domain.CouponDomain;
-import com.mszlu.xt.web.domain.CourseDomain;
-import com.mszlu.xt.web.domain.OrderDomain;
-import com.mszlu.xt.web.domain.SubjectDomain;
+import com.mszlu.xt.web.dao.OrderTradeMapper;
+import com.mszlu.xt.web.domain.*;
 import com.mszlu.xt.web.domain.mq.MqService;
-import com.mszlu.xt.web.model.params.CouponParam;
-import com.mszlu.xt.web.model.params.CourseParam;
-import com.mszlu.xt.web.model.params.OrderParam;
-import com.mszlu.xt.web.model.params.SubjectParam;
+import com.mszlu.xt.web.model.params.*;
 import org.apache.calcite.linq4j.Ord;
 import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
+
 /**
  * @Author yaCoding
  * @create 2023-01-09 下午 4:02
  */
-@SuppressWarnings({"all"})
+
 @Component
 public class OrderDomainRepository {
 
@@ -84,6 +82,47 @@ public class OrderDomainRepository {
         updateWrapper.eq(Order::getId,order.getId());
         updateWrapper.set(Order::getPayOrderId,order.getPayOrderId());
         this.orderMapper.update(null,updateWrapper);
+    }
+
+    public Order findOrderByPayOrderId(String orderId) {
+        LambdaQueryWrapper<Order> queryWrapper = Wrappers.lambdaQuery();
+        queryWrapper.eq(Order::getPayOrderId,orderId);
+        return this.orderMapper.selectOne(queryWrapper);
+    }
+
+    public void updateOrderStatusAndPayStatus(Order order) {
+        LambdaUpdateWrapper<Order> updateWrapper = Wrappers.lambdaUpdate();
+        updateWrapper.eq(Order::getId,order.getId());
+        updateWrapper.set(Order::getPayOrderId,order.getPayOrderId());
+        this.orderMapper.update(null, updateWrapper);
+    }
+
+    @Resource
+    private OrderTradeMapper orderTradeMapper;
+
+    public OrderTrade findOrderTrade(String orderId) {
+        LambdaQueryWrapper<OrderTrade> queryWrapper = Wrappers.lambdaQuery();
+        queryWrapper.eq(OrderTrade::getOrderId,orderId);
+        queryWrapper.last("limit 1");
+        return orderTradeMapper.selectOne(queryWrapper);
+    }
+
+    public void saveOrderTrade(OrderTrade orderTrade) {
+        orderTradeMapper.insert(orderTrade);
+    }
+
+    public void updateOrderTrade(OrderTrade orderTrade) {
+        LambdaUpdateWrapper<OrderTrade> updateWrapper = Wrappers.lambdaUpdate();
+        updateWrapper.eq(OrderTrade::getId,orderTrade.getId());
+        updateWrapper.set(OrderTrade::getPayInfo,orderTrade.getPayInfo());
+        this.orderTradeMapper.update(null, updateWrapper);
+    }
+
+    @Autowired
+    private UserCourseDomainRepository userCourseDomainRepository;
+
+    public UserCourseDomain createUserCourseDomain(UserCourseParam userCourseParam) {
+        return userCourseDomainRepository.createDomain(userCourseParam);
     }
 
 }
