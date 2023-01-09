@@ -26,4 +26,11 @@ public class CouponDomain {
         return couponDomainRepository.findUserCouponByUserId(userId);
     }
 
+    public UserCoupon findUserCouponByUserId(Long userId,Long couponId) {
+        return couponDomainRepository.findUserCouponByUserId(userId,couponId);
+    }
+
+    public void updateCouponStatus(UserCoupon userCoupon) {
+        couponDomainRepository.updateCouponStatus(userCoupon);
+    }
 }

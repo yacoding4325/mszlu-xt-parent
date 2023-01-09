@@ -1,6 +1,7 @@
 package com.mszlu.xt.web.domain.repository;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.mszlu.xt.pojo.Coupon;
 import com.mszlu.xt.pojo.UserCoupon;
@@ -42,6 +43,23 @@ public class CouponDomainRepository {
 
     public Coupon findCouponById(Long couponId) {
         return couponMapper.selectById(couponId);
+    }
+
+    public UserCoupon findUserCouponByUserId(Long userId, Long couponId) {
+        LambdaQueryWrapper<UserCoupon> queryWrapper = Wrappers.lambdaQuery();
+        queryWrapper.eq(UserCoupon::getUserId,userId);
+        queryWrapper.eq(UserCoupon::getCouponId,couponId);
+        queryWrapper.eq(UserCoupon::getStatus,0);
+        queryWrapper.last("limit 1");
+        UserCoupon userCoupon = userCouponMapper.selectOne(queryWrapper);
+        return userCoupon;
+    }
+
+    public void updateCouponStatus(UserCoupon userCoupon) {
+        LambdaUpdateWrapper<UserCoupon> updateWrapper = Wrappers.lambdaUpdate();
+        updateWrapper.eq(UserCoupon::getId,userCoupon.getId());
+        updateWrapper.set(UserCoupon::getStatus,userCoupon.getStatus());
+        this.userCouponMapper.update(null, updateWrapper);
     }
 
 }

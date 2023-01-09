@@ -242,4 +242,7 @@ public class CourseDomain {
         return CallResult.success(userCouponModelList);
     }
 
+    public Course findCourseById(Long courseId) {
+        return this.courseDomainRepository.findCourseById(courseId);
+    }
 }
