@@ -43,6 +43,13 @@ public class OrderDomainRepository {
     @Autowired
     public MqService mqService;
 
+    @Autowired
+    private InviteDomainRepository inviteDomainRepository;
+
+    public InviteDomain createInviteDomain(InviteParam inviteParam) {
+        return inviteDomainRepository.createDomain(inviteParam);
+    }
+
     public OrderDomain createDomain(OrderParam orderParam) {
         return new OrderDomain(this,orderParam);
     }

@@ -13,8 +13,10 @@ import com.mszlu.xt.common.login.UserThreadLocal;
 import com.mszlu.xt.common.model.BusinessCodeEnum;
 import com.mszlu.xt.common.model.CallResult;
 import com.mszlu.xt.common.model.ListPageModel;
+import com.mszlu.xt.common.utils.AESUtils;
 import com.mszlu.xt.common.utils.CommonUtils;
 import com.mszlu.xt.pojo.*;
+import com.mszlu.xt.sso.model.enums.InviteType;
 import com.mszlu.xt.web.domain.pay.WxPayDomain;
 import com.mszlu.xt.web.domain.repository.OrderDomainRepository;
 import com.mszlu.xt.web.model.CourseViewModel;
@@ -29,6 +31,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -117,8 +121,44 @@ public class OrderDomain {
         //在消费方进行消费的时候，订单是否要取消 多长满足取消 以 time为准 s
         map.put("time","1800");
         this.orderDomainRepository.mqService.sendDelayMessage("create_order_delay",map,16);
+
+        //邀请信息的判断
+        fillInvite(userId,order);
         return CallResult.success(orderDisplayModel);
 
+    }
+
+    private void fillInvite(Long userId, Order order) {
+        //_i_ga_b_  weq= billType 有可能是有多个
+        HttpServletRequest request = this.orderParam.getRequest();
+        Cookie[] cookies = request.getCookies();
+        if (cookies == null){
+            return;
+        }
+        List<Map<String, String>> inviteMapList = new ArrayList<>();
+        for (Cookie cookie : cookies) {
+            String name = cookie.getName();
+            String[] strs = name.split("_i_ga_b_");
+            if (strs.length == 2){
+                String billType = strs[1];
+                Map<String, String> map = new HashMap<>();
+                map.put("billType",billType);
+                map.put("userId",cookie.getValue());
+                inviteMapList.add(map);
+            }
+        }
+        for (Map<String, String> map : inviteMapList) {
+            Invite invite = new Invite();
+            invite.setInviteInfo(order.getOrderId());
+            invite.setInviteStatus(0);
+            invite.setInviteTime(System.currentTimeMillis());
+            invite.setInviteType(InviteType.ORDER.getCode());
+            invite.setInviteUserId(userId);
+            invite.setUserId(Long.parseLong(AESUtils.decrypt(map.get("userId"))));
+            invite.setBillType(map.get("billType"));
+            invite.setCreateTime(System.currentTimeMillis());
+            orderDomainRepository.createInviteDomain(null).save(invite);
+        }
     }
 
     /**

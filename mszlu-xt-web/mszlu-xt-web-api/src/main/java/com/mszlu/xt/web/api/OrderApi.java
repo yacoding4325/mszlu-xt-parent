@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * @Author yaCoding
  * @create 2023-01-09 下午 3:56
@@ -25,7 +27,8 @@ public class OrderApi {
     private OrderService orderService;
 
     @PostMapping("submitOrder")
-    public CallResult submitOrder(@RequestBody OrderParam orderParam){
+    public CallResult submitOrder(HttpServletRequest request, @RequestBody OrderParam orderParam){
+        orderParam.setRequest(request);
         return orderService.submitOrder(orderParam);
     }
 
