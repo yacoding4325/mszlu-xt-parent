@@ -8,8 +8,10 @@ import com.mszlu.xt.sso.dao.UserMapper;
 import com.mszlu.xt.sso.dao.data.User;
 import com.mszlu.xt.sso.domain.LoginDomain;
 import com.mszlu.xt.sso.domain.UserDomain;
+import com.mszlu.xt.sso.domain.thread.InviteThread;
 import com.mszlu.xt.sso.model.params.LoginParam;
 import com.mszlu.xt.sso.model.params.UserParam;
+import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.api.WxConsts;
 import me.chanjar.weixin.mp.api.WxMpService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,7 @@ import javax.annotation.Resource;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
+@Slf4j
 @Component
 public class LoginDomainRepository {
 
@@ -33,6 +36,8 @@ public class LoginDomainRepository {
     public StringRedisTemplate redisTemplate;
     @Autowired
     private UserDomainRepository userDomainRepository;
+    @Autowired
+    public InviteThread inviteThread;
 
 
     public LoginDomain createDomain(LoginParam loginParam) {
