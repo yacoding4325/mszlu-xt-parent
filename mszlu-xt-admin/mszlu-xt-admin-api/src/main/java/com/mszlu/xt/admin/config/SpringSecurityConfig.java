@@ -17,6 +17,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     public PasswordEncoder getPasswordEncoder(){
         return new BCryptPasswordEncoder();
     }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 

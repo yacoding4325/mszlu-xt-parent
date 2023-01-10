@@ -9,6 +9,8 @@ import com.mszlu.xt.common.model.CallResult;
 import com.mszlu.xt.common.service.AbstractTemplateAction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 
 @Service
 public class AdminUserServiceImpl  extends  AbstractService implements AdminUserService {
@@ -22,6 +24,17 @@ public class AdminUserServiceImpl  extends  AbstractService implements AdminUser
         adminUserParam.setUsername(username);
         AdminUserDomain adminUserDomain  = adminUserDomainRepository.createDomain(adminUserParam);
         return adminUserDomain.findUserByUsername();
+    }
+
+    @Override
+    public boolean auth(String requestURI, Long userId) {
+        AdminUserDomain adminUserDomain  = adminUserDomainRepository.createDomain(new AdminUserParam());
+        return this.serviceTemplate.executeQuery(new AbstractTemplateAction<Boolean>() {
+            @Override
+            public CallResult<Boolean> doAction() {
+                return adminUserDomain.auth(requestURI,userId);
+            }
+        }).getResult();
     }
 
 }
