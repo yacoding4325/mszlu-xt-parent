@@ -3,6 +3,7 @@ package com.mszlu.xt.web.domain.repository;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.mszlu.xt.common.wx.config.WxPayConfiguration;
 import com.mszlu.xt.pojo.Order;
 import com.mszlu.xt.pojo.OrderTrade;
@@ -11,8 +12,6 @@ import com.mszlu.xt.web.dao.OrderTradeMapper;
 import com.mszlu.xt.web.domain.*;
 import com.mszlu.xt.web.domain.mq.MqService;
 import com.mszlu.xt.web.model.params.*;
-import org.apache.calcite.linq4j.Ord;
-import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -123,6 +122,14 @@ public class OrderDomainRepository {
 
     public UserCourseDomain createUserCourseDomain(UserCourseParam userCourseParam) {
         return userCourseDomainRepository.createDomain(userCourseParam);
+    }
+
+    public Page<Order> orderList(Long userId, int orderStatus, int currentPage, int pageSize) {
+        LambdaQueryWrapper<Order> queryWrapper = Wrappers.lambdaQuery();
+        queryWrapper.eq(Order::getUserId,userId);
+        queryWrapper.ne(Order::getOrderStatus,orderStatus);
+        Page<Order> page = new Page<>(currentPage,pageSize);
+        return this.orderMapper.selectPage(page,queryWrapper);
     }
 
 }
