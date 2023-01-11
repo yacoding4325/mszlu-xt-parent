@@ -37,4 +37,15 @@ public class AdminUserServiceImpl  extends  AbstractService implements AdminUser
         }).getResult();
     }
 
+    @Override
+    public CallResult findRolePage(AdminUserParam adminUserParam) {
+        AdminUserDomain adminUserDomain = adminUserDomainRepository.createDomain(adminUserParam);
+        return this.serviceTemplate.executeQuery(new AbstractTemplateAction<Object>() {
+            @Override
+            public CallResult<Object> doAction() {
+                return adminUserDomain.findRolePage();
+            }
+        });
+    }
+
 }

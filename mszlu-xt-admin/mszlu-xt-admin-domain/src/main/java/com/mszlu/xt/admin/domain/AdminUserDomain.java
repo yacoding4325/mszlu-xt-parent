@@ -1,15 +1,26 @@
 package com.mszlu.xt.admin.domain;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.mszlu.xt.admin.dao.data.AdminMenu;
 import com.mszlu.xt.admin.dao.data.AdminPermission;
+import com.mszlu.xt.admin.dao.data.AdminRole;
 import com.mszlu.xt.admin.dao.data.AdminUser;
 import com.mszlu.xt.admin.domain.repository.AdminUserDomainRepository;
+import com.mszlu.xt.admin.model.AdminMenuModel;
 import com.mszlu.xt.admin.model.AdminUserModel;
 import com.mszlu.xt.admin.params.AdminUserParam;
+import com.mszlu.xt.common.login.UserThreadLocal;
 import com.mszlu.xt.common.model.CallResult;
+import com.mszlu.xt.common.model.ListModel;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.util.AntPathMatcher;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author yaCoding
@@ -58,6 +69,18 @@ public class AdminUserDomain {
             }
         }
         return CallResult.fail(false);
+    }
+
+    public CallResult<Object> findRolePage() {
+
+        int page = this.adminUserParam.getPage();
+        int pageSize = this.adminUserParam.getPageSize();
+        Page<AdminRole> adminRolePage = this.adminUserDomainRepository.findRoleList(page,pageSize);
+        ListModel listModel = new ListModel();
+        listModel.setTotal((int) adminRolePage.getTotal());
+        List<AdminRole> result = adminRolePage.getRecords();
+        listModel.setList(result);
+        return CallResult.success(listModel);
     }
 
 }

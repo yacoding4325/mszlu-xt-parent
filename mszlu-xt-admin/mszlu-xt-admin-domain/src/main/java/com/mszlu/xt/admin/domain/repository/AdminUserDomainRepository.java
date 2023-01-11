@@ -2,14 +2,9 @@ package com.mszlu.xt.admin.domain.repository;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.mszlu.xt.admin.dao.AdminPermissionMapper;
-import com.mszlu.xt.admin.dao.AdminRolePermissionMapper;
-import com.mszlu.xt.admin.dao.AdminUserMapper;
-import com.mszlu.xt.admin.dao.AdminUserRoleMapper;
-import com.mszlu.xt.admin.dao.data.AdminPermission;
-import com.mszlu.xt.admin.dao.data.AdminRolePermission;
-import com.mszlu.xt.admin.dao.data.AdminUser;
-import com.mszlu.xt.admin.dao.data.AdminUserRole;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.mszlu.xt.admin.dao.*;
+import com.mszlu.xt.admin.dao.data.*;
 import com.mszlu.xt.admin.domain.AdminUserDomain;
 import com.mszlu.xt.admin.params.AdminUserParam;
 import org.springframework.stereotype.Component;
@@ -27,6 +22,9 @@ public class AdminUserDomainRepository {
 
     @Resource
     private AdminUserMapper adminUserMapper;
+
+    @Resource
+    private AdminRoleMapper adminRoleMapper;
 
     @Resource
     private AdminUserRoleMapper adminUserRoleMapper;
@@ -70,4 +68,7 @@ public class AdminUserDomainRepository {
         return adminPermissionMapper.selectList(queryWrapper);
     }
 
+    public Page<AdminRole> findRoleList(int page, int pageSize) {
+        return adminRoleMapper.selectPage(new Page<>(page,pageSize),Wrappers.lambdaQuery());
+    }
 }
