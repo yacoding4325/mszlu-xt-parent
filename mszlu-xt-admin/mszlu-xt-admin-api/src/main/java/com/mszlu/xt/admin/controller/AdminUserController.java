@@ -24,4 +24,21 @@ public class AdminUserController {
         return adminUserService.findRolePage(adminUserParam);
     }
 
+
+    @RequestMapping(value = "permission/all")
+    public CallResult permissionAll(){
+        return adminUserService.permissionAll();
+    }
+
+    //查询所有权限
+    @RequestMapping(value = "permission/findPermissionPage")
+    public CallResult findPermissionPage(@RequestBody AdminUserParam adminUserParam){
+        return adminUserService.findPermissionPage(adminUserParam);
+    }
+
+    @RequestMapping(value = "permission/update")
+    public CallResult updatePermission(@RequestBody AdminUserParam adminUserParam){
+        return adminUserService.updatePermission(adminUserParam);
+    }
+
 }

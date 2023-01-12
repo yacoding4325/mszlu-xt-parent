@@ -83,4 +83,27 @@ public class AdminUserDomain {
         return CallResult.success(listModel);
     }
 
+    public CallResult<Object> permissionAll() {
+        List<AdminPermission> allPermission = this.adminUserDomainRepository.findAllPermission();
+        return CallResult.success(allPermission);
+    }
+
+    public CallResult<Object> findPermissionPage() {
+        int page = this.adminUserParam.getPage();
+        int pageSize = this.adminUserParam.getPageSize();
+        Page<AdminPermission> adminPermissionPage = this.adminUserDomainRepository.findPermissionList(page,pageSize);
+        ListModel listModel = new ListModel();
+        listModel.setTotal((int) adminPermissionPage.getTotal());
+        List<AdminPermission> result = adminPermissionPage.getRecords();
+        listModel.setList(result);
+        return CallResult.success(listModel);
+    }
+
+    public CallResult<Object> updatePermission() {
+        AdminPermission adminPermission = new AdminPermission();
+        BeanUtils.copyProperties(adminUserParam,adminPermission);
+        adminPermission.setId(adminUserParam.getPermissionId());
+        this.adminUserDomainRepository.updatePermission(adminPermission);
+        return CallResult.success();
+    }
 }

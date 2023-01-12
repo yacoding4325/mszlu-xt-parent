@@ -71,4 +71,16 @@ public class AdminUserDomainRepository {
     public Page<AdminRole> findRoleList(int page, int pageSize) {
         return adminRoleMapper.selectPage(new Page<>(page,pageSize),Wrappers.lambdaQuery());
     }
+
+    public List<AdminPermission> findAllPermission() {
+        return adminPermissionMapper.selectList(Wrappers.lambdaQuery());
+    }
+
+    public Page<AdminPermission> findPermissionList(int page, int pageSize) {
+        return adminPermissionMapper.selectPage(new Page<>(page,pageSize),Wrappers.lambdaQuery());
+    }
+
+    public void updatePermission(AdminPermission adminPermission) {
+        adminPermissionMapper.updateById(adminPermission);
+    }
 }

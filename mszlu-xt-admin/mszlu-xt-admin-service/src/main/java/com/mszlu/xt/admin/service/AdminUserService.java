@@ -12,4 +12,20 @@ public interface AdminUserService {
 
     CallResult findRolePage(AdminUserParam adminUserParam);
 
+    CallResult permissionAll();
+
+    /**
+     * //查询所有权限
+     * @param adminUserParam
+     * @return
+     */
+    CallResult findPermissionPage(AdminUserParam adminUserParam);
+
+    /**
+     * 更新权限
+     * @param adminUserParam
+     * @return
+     */
+    CallResult updatePermission(AdminUserParam adminUserParam);
+
 }
