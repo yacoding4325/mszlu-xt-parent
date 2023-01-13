@@ -90,4 +90,7 @@ public interface AdminUserService {
      */
     CallResult updateMenu(AdminUserParam adminUserParam);
 
+    //获取菜单列表
+    CallResult userMenuList(AdminUserParam adminUserParam);
+
 }

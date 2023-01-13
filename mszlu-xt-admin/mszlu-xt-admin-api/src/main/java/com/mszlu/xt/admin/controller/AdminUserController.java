@@ -89,4 +89,9 @@ public class AdminUserController {
         return adminUserService.updateMenu(adminUserParam);
     }
 
+    @RequestMapping(value = "userMenuList")
+    public CallResult userMenuList(){
+        return adminUserService.userMenuList(new AdminUserParam());
+    }
+
 }

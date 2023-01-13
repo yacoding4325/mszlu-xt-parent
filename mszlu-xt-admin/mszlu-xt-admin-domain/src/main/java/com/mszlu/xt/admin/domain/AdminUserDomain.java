@@ -203,4 +203,51 @@ public class AdminUserDomain {
         this.adminUserDomainRepository.updateMenu(menu);
         return CallResult.success();
     }
+
+    public CallResult<Object> userMenuList() {
+        //要的数据是什么
+        List<AdminMenuModel> adminMenuModelList = new ArrayList<>();
+        //根据用户来去进行查询 角色 角色查询菜单
+        Long userId = UserThreadLocal.get();
+        List<Integer> roleIdList = this.adminUserDomainRepository.findAdminRoleIdListByUserId(userId);
+        if (roleIdList.isEmpty()){
+            return CallResult.success(adminMenuModelList);
+        }
+        List<AdminMenu> adminMenuList = this.adminUserDomainRepository.findMenuListByRoleIds(roleIdList);
+        //构建树形菜单
+        //首先第一级的菜单先构建出来
+        for (AdminMenu menu : adminMenuList) {
+            if (menu.getLevel() == 1){
+                AdminMenuModel adminMenuModel = new AdminMenuModel();
+                adminMenuModel.setId(menu.getId());
+                adminMenuModel.setTitle(menu.getMenuName());
+                adminMenuModel.setIcon("fa-user-md");
+                adminMenuModel.setLevel(menu.getLevel());
+                adminMenuModel.setChildren(childMenu(adminMenuModel,adminMenuList));
+                adminMenuModelList.add(adminMenuModel);
+            }
+        }
+        return CallResult.success(adminMenuModelList);
+    }
+
+    private List<AdminMenuModel> childMenu(AdminMenuModel adminMenuModel, List<AdminMenu> adminMenuList) {
+        List<AdminMenuModel> adminMenuModelList = new ArrayList<>();
+        if (adminMenuModel.getLevel() == 2){
+            return adminMenuModelList;
+        }
+        for (AdminMenu menu : adminMenuList) {
+            if (menu.getParentId().equals(adminMenuModel.getId()) && menu.getLevel() != 1) {
+                AdminMenuModel amm = new AdminMenuModel();
+                amm.setId(menu.getId());
+                amm.setTitle(menu.getMenuName());
+                amm.setIcon("fa-user-md");
+                amm.setLevel(menu.getLevel());
+                amm.setLinkUrl(menu.getMenuLink());
+                amm.setChildren(childMenu(amm, adminMenuList));
+                adminMenuModelList.add(amm);
+            }
+        }
+        return adminMenuModelList;
+    }
+
 }

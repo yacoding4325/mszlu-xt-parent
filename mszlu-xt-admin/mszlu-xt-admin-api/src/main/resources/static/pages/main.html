@@ -95,8 +95,11 @@
             },
         created:function () {
             axios.post("/lzadmin/user/userInfo").then((res)=>{
-                this.username = res.data;
-            })
+                this.username = res.data.result;
+            });
+            axios.post("/lzadmin/user/userMenuList").then((res)=>{
+                this.menuList = res.data.result;
+            });
         },
         data:{
             username:"",

@@ -187,5 +187,15 @@ public class AdminUserServiceImpl  extends  AbstractService implements AdminUser
         });
     }
 
+    @Override
+    public CallResult userMenuList(AdminUserParam adminUserParam) {
+        AdminUserDomain adminUserDomain = this.adminUserDomainRepository.createDomain(adminUserParam);
+        return this.serviceTemplate.executeQuery(new AbstractTemplateAction<Object>() {
+            @Override
+            public CallResult<Object> doAction() {
+                return adminUserDomain.userMenuList();
+            }
+        });
+    }
 
 }
