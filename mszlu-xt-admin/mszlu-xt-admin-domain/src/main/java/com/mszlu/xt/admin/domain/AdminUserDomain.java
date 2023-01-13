@@ -14,6 +14,7 @@ import com.mszlu.xt.common.model.CallResult;
 import com.mszlu.xt.common.model.ListModel;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
+import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.util.AntPathMatcher;
 
@@ -106,4 +107,60 @@ public class AdminUserDomain {
         this.adminUserDomainRepository.updatePermission(adminPermission);
         return CallResult.success();
     }
+
+    public CallResult<Object> findPage() {
+        int page = this.adminUserParam.getPage();
+        int pageSize = this.adminUserParam.getPageSize();
+        Page<AdminUser> adminUserPage = this.adminUserDomainRepository.findUserList(page,pageSize);
+        ListModel listModel = new ListModel();
+        listModel.setTotal((int) adminUserPage.getTotal());
+        List<AdminUser> result = adminUserPage.getRecords();
+        listModel.setList(result);
+        return CallResult.success(listModel);
+    }
+
+    public CallResult<Object> addUser() {
+        /**
+         * 1. 密码需要加密
+         * 2. 角色存入关联表
+         */
+        AdminUser adminUser = new AdminUser();
+        adminUser.setUsername(this.adminUserParam.getUsername());
+        adminUser.setPassword(new BCryptPasswordEncoder().encode(this.adminUserParam.getPassword()));
+        this.adminUserDomainRepository.saveUser(adminUser);
+        List<Integer> roleIdList = this.adminUserParam.getRoleIdList();
+        for (Integer roleId : roleIdList) {
+            this.adminUserDomainRepository.saveUserRole(adminUser.getId(),roleId);
+        }
+        return CallResult.success();
+
+    }
+
+    public CallResult<Object> findUserById() {
+        AdminUser adminUser = this.adminUserDomainRepository.findUserById(this.adminUserParam.getId());
+        List<Integer> adminRoleIdListByUserId = this.adminUserDomainRepository.findAdminRoleIdListByUserId(this.adminUserParam.getId());
+        Map<String,Object> result = new HashMap<>();
+        result.put("user",adminUser);
+        result.put("roleIdList",adminRoleIdListByUserId);
+        return CallResult.success(result);
+    }
+
+    //编辑
+    public CallResult<Object> update() {
+        AdminUser adminUser = new AdminUser();
+        adminUser.setUsername(this.adminUserParam.getUsername());
+        String newPassword = this.adminUserParam.getNewPassword();
+        if (StringUtils.isNotBlank(newPassword)) {
+            adminUser.setPassword(new BCryptPasswordEncoder().encode(this.adminUserParam.getNewPassword()));
+        }
+        adminUser.setId(this.adminUserParam.getId());
+        this.adminUserDomainRepository.updateUser(adminUser);
+        this.adminUserDomainRepository.deleteUserRoleByUserId(adminUser.getId());
+        List<Integer> roleIdList = this.adminUserParam.getRoleIdList();
+        for (Integer roleId : roleIdList) {
+            this.adminUserDomainRepository.saveUserRole(adminUser.getId(),roleId);
+        }
+        return CallResult.success();
+    }
+
 }

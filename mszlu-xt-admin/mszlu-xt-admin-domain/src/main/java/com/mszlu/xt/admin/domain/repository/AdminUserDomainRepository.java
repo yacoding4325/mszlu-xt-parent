@@ -10,6 +10,7 @@ import com.mszlu.xt.admin.params.AdminUserParam;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.nio.file.Watchable;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -83,4 +84,44 @@ public class AdminUserDomainRepository {
     public void updatePermission(AdminPermission adminPermission) {
         adminPermissionMapper.updateById(adminPermission);
     }
+
+    //查找用户管理 页面
+    public Page<AdminUser> findUserList(int page, int pageSize) {
+        return adminUserMapper.selectPage(new Page<>(page,pageSize),Wrappers.lambdaQuery());
+    }
+
+    public void saveUser(AdminUser adminUser) {
+        adminUserMapper.insert(adminUser);
+    }
+
+    public void saveUserRole(Long userId, Integer roleId) {
+        AdminUserRole adminUserRole = new AdminUserRole();
+        adminUserRole.setRoleId(roleId);;
+        adminUserRole.setUserId(userId);
+        this.adminUserRoleMapper.insert(adminUserRole);
+    }
+
+    public AdminUser findUserById(Long id) {
+        return adminUserMapper.selectById(id);
+    }
+
+    public List<Integer> findAdminRoleIdListByUserId(Long adminUserId) {
+        LambdaQueryWrapper<AdminUserRole> queryWrapper = Wrappers.lambdaQuery();
+        queryWrapper.eq(AdminUserRole::getUserId, adminUserId);
+        queryWrapper.select(AdminUserRole::getRoleId);
+        List<AdminUserRole> adminUserRoleList = this.adminUserRoleMapper.selectList(queryWrapper);
+        List<Integer> roleIdList = adminUserRoleList.stream().map(AdminUserRole::getRoleId).collect(Collectors.toList());
+        return roleIdList;
+    }
+
+    public void updateUser(AdminUser adminUser) {
+        adminUserMapper.updateById(adminUser);
+    }
+
+    public void deleteUserRoleByUserId(Long userId) {
+        LambdaQueryWrapper<AdminUserRole> queryWrapper = Wrappers.lambdaQuery();
+        queryWrapper.eq(AdminUserRole::getUserId,userId);
+        this.adminUserRoleMapper.delete(queryWrapper);
+    }
+
 }

@@ -28,4 +28,32 @@ public interface AdminUserService {
      */
     CallResult updatePermission(AdminUserParam adminUserParam);
 
+    /**
+     * 查找用户管理页面
+     * @param adminUserParam
+     * @return
+     */
+    CallResult findPage(AdminUserParam adminUserParam);
+
+    /**
+     * 添加用户管理页面
+     * @param adminUserParam
+     * @return
+     */
+    CallResult addUser(AdminUserParam adminUserParam);
+
+    /**
+     * 通过id查找用户
+     * @param adminUserParam
+     * @return
+     */
+    CallResult findUserById(AdminUserParam adminUserParam);
+
+    /**
+     * 编辑
+     * @param adminUserParam
+     * @return
+     */
+    CallResult update(AdminUserParam adminUserParam);
+
 }

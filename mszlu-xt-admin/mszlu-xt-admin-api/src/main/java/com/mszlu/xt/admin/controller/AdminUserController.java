@@ -41,4 +41,27 @@ public class AdminUserController {
         return adminUserService.updatePermission(adminUserParam);
     }
 
+    //用户管理权限--查找页面
+    @RequestMapping(value = "findPage")
+    public CallResult findPage(@RequestBody AdminUserParam adminUserParam){
+        return adminUserService.findPage(adminUserParam);
+    }
+
+    //新增用户
+    @RequestMapping(value = "add")
+    public CallResult add(@RequestBody AdminUserParam adminUserParam){
+        return adminUserService.addUser(adminUserParam);
+    }
+
+    //通过id查找用户
+    @RequestMapping(value = "findUserById")
+    public CallResult findUserById(@RequestBody AdminUserParam adminUserParam){
+        return adminUserService.findUserById(adminUserParam);
+    }
+
+    @RequestMapping(value = "update")
+    public CallResult update(@RequestBody AdminUserParam adminUserParam){
+        return adminUserService.update(adminUserParam);
+    }
+
 }
