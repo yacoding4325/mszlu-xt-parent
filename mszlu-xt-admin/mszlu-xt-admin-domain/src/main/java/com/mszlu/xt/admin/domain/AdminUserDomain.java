@@ -163,4 +163,44 @@ public class AdminUserDomain {
         return CallResult.success();
     }
 
+    public CallResult<Object> findMenuPage() {
+        int page = this.adminUserParam.getPage();
+        int pageSize = this.adminUserParam.getPageSize();
+        Page<AdminMenu> adminMenuPage = this.adminUserDomainRepository.findMenuPage(page,pageSize);
+        ListModel listModel = new ListModel();
+        listModel.setTotal((int) adminMenuPage.getTotal());
+        List<AdminMenu> result = adminMenuPage.getRecords();
+        listModel.setList(result);
+        return CallResult.success(listModel);
+    }
+
+    public CallResult<Object> menuAll() {
+        List<AdminMenu> menuAll = this.adminUserDomainRepository.findMenuAll();
+        AdminMenu parent = new AdminMenu();
+        parent.setId(0);
+        parent.setLevel(0);
+        parent.setMenuName("无父菜单");
+        menuAll.add(parent);
+        return CallResult.success(menuAll);
+    }
+
+    public CallResult<Object> saveMenu() {
+        AdminMenu menu = new AdminMenu();
+        BeanUtils.copyProperties(this.adminUserParam,menu);
+        this.adminUserDomainRepository.saveMenu(menu);
+        return CallResult.success();
+    }
+
+    public CallResult<Object> findMenuById() {
+        AdminMenu menu = this.adminUserDomainRepository.findMenuById(this.adminUserParam.getMenuId());
+        return CallResult.success(menu);
+    }
+
+    public CallResult<Object> updateMenu() {
+        AdminMenu menu = new AdminMenu();
+        BeanUtils.copyProperties(this.adminUserParam,menu);
+        menu.setId(this.adminUserParam.getMenuId());
+        this.adminUserDomainRepository.updateMenu(menu);
+        return CallResult.success();
+    }
 }

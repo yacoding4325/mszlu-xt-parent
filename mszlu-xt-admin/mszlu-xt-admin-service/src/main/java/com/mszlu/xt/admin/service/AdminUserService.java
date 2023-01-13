@@ -56,4 +56,38 @@ public interface AdminUserService {
      */
     CallResult update(AdminUserParam adminUserParam);
 
+    /**
+     * 菜单分页查询
+     * @param adminUserParam
+     * @return
+     */
+    CallResult findMenuPage(AdminUserParam adminUserParam);
+
+    /**
+     *
+     * @return
+     */
+    CallResult menuAll();
+
+    /**
+     * 保存菜单
+     * @param adminUserParam
+     * @return
+     */
+    CallResult saveMenu(AdminUserParam adminUserParam);
+
+    /**
+     * 通过id查找到菜单
+     * @param adminUserParam
+     * @return
+     */
+    CallResult findMenuById(AdminUserParam adminUserParam);
+
+    /**
+     * 更新菜单
+     * @param adminUserParam
+     * @return
+     */
+    CallResult updateMenu(AdminUserParam adminUserParam);
+
 }

@@ -36,6 +36,9 @@ public class AdminUserDomainRepository {
     @Resource
     private AdminPermissionMapper adminPermissionMapper;
 
+    @Resource
+    private AdminMenuMapper adminMenuMapper;
+
 
     public AdminUserDomain createDomain(AdminUserParam adminUserParam) {
         return new AdminUserDomain(this,adminUserParam);
@@ -122,6 +125,26 @@ public class AdminUserDomainRepository {
         LambdaQueryWrapper<AdminUserRole> queryWrapper = Wrappers.lambdaQuery();
         queryWrapper.eq(AdminUserRole::getUserId,userId);
         this.adminUserRoleMapper.delete(queryWrapper);
+    }
+
+    public Page<AdminMenu> findMenuPage(int page, int pageSize) {
+        return adminMenuMapper.selectPage(new Page<>(page,pageSize),Wrappers.lambdaQuery());
+    }
+
+    public List<AdminMenu> findMenuAll() {
+        return adminMenuMapper.selectList(Wrappers.lambdaQuery());
+    }
+
+    public void saveMenu(AdminMenu menu) {
+        adminMenuMapper.insert(menu);
+    }
+
+    public AdminMenu findMenuById(Integer menuId) {
+        return adminMenuMapper.selectById(menuId);
+    }
+
+    public void updateMenu(AdminMenu menu) {
+        adminMenuMapper.updateById(menu);
     }
 
 }
