@@ -2,7 +2,10 @@ package com.mszlu.xt.web.domain;
 
 import com.mszlu.xt.pojo.UserHistory;
 import com.mszlu.xt.web.domain.repository.UserHistoryDomainRepository;
+import com.mszlu.xt.web.model.SubjectModel;
 import com.mszlu.xt.web.model.params.UserHistoryParam;
+
+import java.util.List;
 
 /**
  * @Author yaCoding
@@ -34,6 +37,11 @@ public class UserHistoryDomain {
 
     public void updateUserHistoryStatus(Long historyId, int historyStatus, long finishTime) {
         userHistoryDomainRepository.updateUserHistoryStatus(historyId,historyStatus,finishTime);
+    }
+
+    //用户历史记录（通过主题列表）
+    public Integer countUserHistoryBySubjectList(Long userId, List<SubjectModel> subjectInfoByCourseId) {
+        return userHistoryDomainRepository.countUserHistoryBySubjectList(userId,subjectInfoByCourseId);
     }
 
 }

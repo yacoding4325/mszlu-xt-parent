@@ -63,4 +63,10 @@ public class UserCourseDomainRepository {
         userCourseMapper.update(null, updateWrapper);
     }
 
+    public List<UserCourse> findUserCourseList(Long userId) {
+        LambdaQueryWrapper<UserCourse> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(UserCourse::getUserId,userId);
+        return userCourseMapper.selectList(queryWrapper);
+    }
+
 }

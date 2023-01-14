@@ -54,4 +54,9 @@ public class UserCourseDomain {
         }
 
     }
+
+    public List<UserCourse> findUserCourseList(Long userId) {
+        return userCourseDomainRepository.findUserCourseList(userId);
+    }
+
 }

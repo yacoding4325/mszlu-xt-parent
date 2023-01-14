@@ -5,10 +5,13 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.mszlu.xt.pojo.UserHistory;
 import com.mszlu.xt.web.dao.UserHistoryMapper;
 import com.mszlu.xt.web.domain.UserHistoryDomain;
+import com.mszlu.xt.web.model.SubjectModel;
 import com.mszlu.xt.web.model.params.UserHistoryParam;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @Author yaCoding
@@ -48,6 +51,16 @@ public class UserHistoryDomainRepository {
         userHistory.setHistoryStatus(historyStatus);
         userHistory.setFinishTime(finishTime);
         userHistoryMapper.updateById(userHistory);
+    }
+
+    //通过课程列表 计数用户历史记录
+    public Integer countUserHistoryBySubjectList(Long userId, List<SubjectModel> subjectInfoByCourseId) {
+        //计算 课程的学习次数 课程所包含的 学科 学习的次数 ，练习的次数
+        List<Long> subjectIdList = subjectInfoByCourseId.stream().map(SubjectModel::getId).collect(Collectors.toList());
+        LambdaQueryWrapper<UserHistory> queryWrapper = Wrappers.lambdaQuery();
+        queryWrapper.eq(UserHistory::getUserId,userId);
+        queryWrapper.in(UserHistory::getSubjectId,subjectIdList);
+        return this.userHistoryMapper.selectCount(queryWrapper);
     }
 
 }
