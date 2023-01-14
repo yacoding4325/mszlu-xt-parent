@@ -324,6 +324,13 @@
                             this.dialogFormVisibleEdit = false;
                             this.findPage();
                         }
+                    }).catch((err)=>{
+                        if ('Error: Request failed with status code 403' == err){
+                            this.$message({
+                                message: '无权限，请联系管理员',
+                                type: 'error'
+                            });
+                        }
                     });
                 },
                 //添加
@@ -338,6 +345,13 @@
                             this.dialogFormVisible = false;
                             this.findPage();
                         }
+                    }).catch((err)=>{
+                        if ('Error: Request failed with status code 403' == err){
+                            this.$message({
+                                message: '无权限，请联系管理员',
+                                type: 'error'
+                            });
+                        }
                     });
                 },
                 //分页查询
@@ -347,6 +361,13 @@
                         if (res.data.success){
                             this.dataList = res.data.result.list;
                             this.pagination.total = res.data.result.size;
+                        }
+                    }).catch((err)=>{
+                        if ('Error: Request failed with status code 403' == err){
+                            this.$message({
+                                message: '无权限，请联系管理员',
+                                type: 'error'
+                            });
                         }
                     });
                 },
@@ -364,6 +385,13 @@
                         if (res.data.success){
                             this.tableData = res.data.result;
                         }
+                    }).catch((err)=>{
+                        if ('Error: Request failed with status code 403' == err){
+                            this.$message({
+                                message: '无权限，请联系管理员',
+                                type: 'error'
+                            });
+                        }
                     });
                 },
                 // 弹出编辑窗口
@@ -375,6 +403,13 @@
                             this.formData  = res.data.result;
                             this.tableData = res.data.result.subjectList;
                             this.subjects = res.data.result.subjectIdList;
+                        }
+                    }).catch((err)=>{
+                        if ('Error: Request failed with status code 403' == err){
+                            this.$message({
+                                message: '无权限，请联系管理员',
+                                type: 'error'
+                            });
                         }
                     });
                 },
