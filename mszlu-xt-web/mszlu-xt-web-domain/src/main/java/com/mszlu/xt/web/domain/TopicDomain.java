@@ -502,4 +502,44 @@ public class TopicDomain {
         return CallResult.success(listModel);
     }
 
+    public CallResult<Object> userProblemSearch() {
+        int page = this.topicParam.getPage();
+        int pageSize = this.topicParam.getPageSize();
+        String subjectName = this.topicParam.getSubjectName();
+        String subjectGrade = this.topicParam.getSubjectGrade();
+        String subjectTerm = this.topicParam.getSubjectTerm();
+        Long userId = UserThreadLocal.get();
+        //去查询 是否有 查询的学科条件
+        Long searchSubjectId = this.topicDomainRepository.createSubjectDomain(null).findSubjectByInfo(subjectName,subjectGrade,subjectTerm);
+        Page<UserProblem> userProblemListPage = null;
+        if (searchSubjectId == null){
+            userProblemListPage = this.topicDomainRepository.createUserProblem(null).findUserProblemList(userId, ErrorStatus.NO_SOLVE.getCode(),page,pageSize);
+        }else{
+            userProblemListPage = this.topicDomainRepository.createUserProblem(null).findUserProblemListBySubjectId(searchSubjectId,userId, ErrorStatus.NO_SOLVE.getCode(),page,pageSize);
+        }
+        List<UserProblemModel> userProblemModelList = new ArrayList<>();
+        List<UserProblem> userProblemList = userProblemListPage.getRecords();
+        for (UserProblem userProblem : userProblemList){
+            Long topicId = userProblem.getTopicId();
+            Long subjectId = userProblem.getSubjectId();
+            Topic topic = this.topicDomainRepository.findTopicById(topicId);
+            TopicModelView topicModelView = getTopicModelView(topic);
+            SubjectModel subject = this.topicDomainRepository.createSubjectDomain(null).findSubject(subjectId);
+            UserProblemModel userProblemModel = new UserProblemModel();
+            userProblemModel.setErrorCount(userProblem.getErrorCount());
+            userProblemModel.setSubject(subject);
+            userProblemModel.setTopic(topicModelView);
+            userProblemModel.setProblemId(userProblem.getId());
+            userProblemModel.setErrorAnswer(userProblem.getErrorAnswer());
+            userProblemModel.setErrorTime(new DateTime(userProblem.getErrorTime()).toString("yyyy-MM-dd HH:mm:ss"));
+            userProblemModelList.add(userProblemModel);
+        }
+        ListPageModel<UserProblemModel> listPageModel = new ListPageModel<>();
+        listPageModel.setList(userProblemModelList);
+        listPageModel.setPage(page);
+        listPageModel.setPageCount(pageSize);
+        listPageModel.setSize((int) userProblemListPage.getTotal());
+        return CallResult.success(listPageModel);
+    }
+
 }

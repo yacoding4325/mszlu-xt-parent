@@ -50,4 +50,25 @@ public class SubjectDomainRepository {
         return subjectMapper.selectById(subjectId);
     }
 
+    public Long findSubjectByInfo(String subjectName, String subjectGrade, String subjectTerm) {
+        LambdaQueryWrapper<Subject> queryWrapper = Wrappers.lambdaQuery();
+        boolean isNull = true;
+        if (StringUtils.isNotBlank(subjectName)){
+            queryWrapper.eq(Subject::getSubjectName,subjectName);
+            isNull = false;
+        }
+        if (StringUtils.isNotBlank(subjectGrade)){
+            queryWrapper.eq(Subject::getSubjectGrade,subjectGrade);
+            isNull = false;
+        }
+        if (StringUtils.isNotBlank(subjectTerm)){
+            queryWrapper.eq(Subject::getSubjectTerm,subjectTerm);
+            isNull = false;
+        }
+        if (isNull){
+            return null;
+        }
+        Subject subject = subjectMapper.selectOne(queryWrapper);
+        return subject == null ? null : subject.getId();
+    }
 }

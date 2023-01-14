@@ -29,4 +29,9 @@ public class TopicApi {
         return topicService.jump(topicParam);
     }
 
+    @PostMapping(value = "userProblemSearch")
+    public CallResult userProblemSearch(@RequestBody TopicParam topicParam){
+        return topicService.userProblemSearch(topicParam);
+    }
+
 }

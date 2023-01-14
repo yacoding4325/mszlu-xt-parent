@@ -22,4 +22,12 @@ public interface TopicService {
      * @return
      */
     CallResult practiceHistory(TopicParam topicParam);
+
+    /**
+     * 用户问题搜索
+     * @param topicParam
+     * @return
+     */
+    CallResult userProblemSearch(TopicParam topicParam);
+
 }

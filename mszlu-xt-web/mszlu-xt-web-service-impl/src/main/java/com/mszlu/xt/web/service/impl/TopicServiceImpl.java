@@ -71,4 +71,16 @@ public class TopicServiceImpl extends AbstractService implements TopicService {
 
     }
 
+    @Override
+    public CallResult userProblemSearch(TopicParam topicParam) {
+        TopicDomain topicDomain = this.topicDomainRepository.createDomain(topicParam);
+        return this.serviceTemplate.executeQuery(new AbstractTemplateAction<Object>() {
+            @Override
+            public CallResult<Object> doAction() {
+                return topicDomain.userProblemSearch();
+            }
+        });
+
+    }
+
 }
