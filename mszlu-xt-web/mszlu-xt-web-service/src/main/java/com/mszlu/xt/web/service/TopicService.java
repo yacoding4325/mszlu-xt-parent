@@ -16,4 +16,10 @@ public interface TopicService {
 
     CallResult jump(TopicParam topicParam);
 
+    /**
+     * 学习历史记录
+     * @param topicParam
+     * @return
+     */
+    CallResult practiceHistory(TopicParam topicParam);
 }

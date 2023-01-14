@@ -5,7 +5,9 @@ import com.mszlu.xt.common.cache.Cache;
 import com.mszlu.xt.common.login.UserThreadLocal;
 import com.mszlu.xt.common.model.CallResult;
 import com.mszlu.xt.web.model.params.CourseParam;
+import com.mszlu.xt.web.model.params.TopicParam;
 import com.mszlu.xt.web.service.CourseService;
+import com.mszlu.xt.web.service.TopicService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +18,9 @@ public class CourseApi {
 
     @Autowired
     private CourseService courseService;
+
+    @Autowired
+    private TopicService topicService;
 
     /**
      * 加缓存：
@@ -53,6 +58,11 @@ public class CourseApi {
     public CallResult myCourse(){
         CourseParam courseParam = new CourseParam();
         return courseService.myCourse(courseParam);
+    }
+
+    @PostMapping(value = "practiceHistory")
+    public CallResult practiceHistory(@RequestBody TopicParam topicParam){
+        return topicService.practiceHistory(topicParam);
     }
 
 }

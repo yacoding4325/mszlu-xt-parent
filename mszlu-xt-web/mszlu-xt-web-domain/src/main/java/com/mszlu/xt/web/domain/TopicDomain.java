@@ -1,10 +1,12 @@
 package com.mszlu.xt.web.domain;
 
 import com.alibaba.fastjson.JSON;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.mszlu.xt.common.enums.TopicType;
 import com.mszlu.xt.common.login.UserThreadLocal;
 import com.mszlu.xt.common.model.BusinessCodeEnum;
 import com.mszlu.xt.common.model.CallResult;
+import com.mszlu.xt.common.model.ListPageModel;
 import com.mszlu.xt.common.model.topic.ContentAndImage;
 import com.mszlu.xt.common.model.topic.FillBlankChoice;
 import com.mszlu.xt.pojo.Topic;
@@ -13,10 +15,7 @@ import com.mszlu.xt.pojo.UserPractice;
 import com.mszlu.xt.pojo.UserProblem;
 import com.mszlu.xt.web.dao.data.TopicDTO;
 import com.mszlu.xt.web.domain.repository.TopicDomainRepository;
-import com.mszlu.xt.web.model.PracticeDetailModel;
-import com.mszlu.xt.web.model.SubjectModel;
-import com.mszlu.xt.web.model.TopicModelView;
-import com.mszlu.xt.web.model.TopicSubmitModel;
+import com.mszlu.xt.web.model.*;
 import com.mszlu.xt.web.model.enums.ErrorStatus;
 import com.mszlu.xt.web.model.enums.HistoryStatus;
 import com.mszlu.xt.web.model.params.TopicParam;
@@ -464,4 +463,43 @@ public class TopicDomain {
         map.put("topic",topicModelView);
         return CallResult.success(map);
     }
+
+    public CallResult<Object> practiceHistory() {
+        Long userId = UserThreadLocal.get();
+        Integer page = this.topicParam.getPage();
+        Integer pageSize = this.topicParam.getPageSize();
+        Page<UserHistory> userHistoryPage = this.topicDomainRepository.createUserHistoryDomain(null).findUserHistoryList(userId,page,pageSize);
+        List<UserHistory> userHistoryList = userHistoryPage.getRecords();
+        List<UserHistoryModel> userHistoryModelList = new ArrayList<>();
+        for (UserHistory userHistory : userHistoryList) {
+            UserHistoryModel userHistoryModel = new UserHistoryModel();
+            userHistoryModel.setId(userHistory.getId());
+            userHistoryModel.setCreateTime(new DateTime(userHistory.getCreateTime()).toString("yyyy-MM-dd HH:mm:ss"));
+            userHistoryModel.setHistoryStatus(userHistory.getHistoryStatus());
+            SubjectModel subject = this.topicDomainRepository.createSubjectDomain(null).findSubject(userHistory.getSubjectId());
+            userHistoryModel.setSubjectName(subject.getSubjectName()+" "+subject.getSubjectGrade()+" "+subject.getSubjectTerm());
+            userHistoryModel.setSubjectId(subject.getId());
+            userHistoryModel.setFinishTime(userHistory.getFinishTime() == 0 ? "":new DateTime(userHistory.getFinishTime()).toString("yyyy-MM-dd HH:mm:ss"));
+            List<Integer> subjectUnitList = JSON.parseArray(userHistory.getSubjectUnits(), Integer.class);
+            userHistoryModel.setSubjectUnitList(subjectUnitList);
+            userHistoryModel.setUseTime(userHistory.getFinishTime() == 0 ? "":useTime(userHistory.getFinishTime(),userHistory.getCreateTime()));
+            List<Long> courseIdList = this.topicDomainRepository.createCourseDomain(null).findCourseIdListBySubjectId(subject.getId());
+            int count = this.topicDomainRepository.createUserCourseDomain(null).countUserCourseInCourseIdList(userId,courseIdList,System.currentTimeMillis());
+            if (count > 0){
+                //判断是否此学习 还在购买的 有效期内
+                userHistoryModel.setStatus(0);
+            }else{
+                userHistoryModel.setStatus(1);
+            }
+            userHistoryModelList.add(userHistoryModel);
+        }
+        ListPageModel<UserHistoryModel> listModel = new ListPageModel<>();
+        listModel.setList(userHistoryModelList);
+        listModel.setSize(userHistoryPage.getTotal());
+        listModel.setPage(page);
+        listModel.setPageSize(pageSize);
+        listModel.setPageCount(userHistoryPage.getPages());
+        return CallResult.success(listModel);
+    }
+
 }

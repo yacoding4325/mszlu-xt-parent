@@ -1,5 +1,6 @@
 package com.mszlu.xt.web.domain;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.mszlu.xt.pojo.UserHistory;
 import com.mszlu.xt.web.domain.repository.UserHistoryDomainRepository;
 import com.mszlu.xt.web.model.SubjectModel;
@@ -42,6 +43,10 @@ public class UserHistoryDomain {
     //用户历史记录（通过主题列表）
     public Integer countUserHistoryBySubjectList(Long userId, List<SubjectModel> subjectInfoByCourseId) {
         return userHistoryDomainRepository.countUserHistoryBySubjectList(userId,subjectInfoByCourseId);
+    }
+
+    public Page<UserHistory> findUserHistoryList(Long userId, Integer page, Integer pageSize) {
+        return userHistoryDomainRepository.findUserHistoryList(userId,page,pageSize);
     }
 
 }
