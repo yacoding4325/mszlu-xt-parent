@@ -30,10 +30,35 @@ public class AdminUserController {
         return adminUserService.permissionAll();
     }
 
-    //查询所有权限
+    //角色添加
+    @RequestMapping(value = "role/add")
+    public CallResult roleAdd(@RequestBody AdminUserParam adminUserParam){
+        return adminUserService.add(adminUserParam);
+    }
+
+    @RequestMapping(value = "role/findRoleById")
+    public CallResult findRoleById(@RequestBody AdminUserParam adminUserParam){
+        return adminUserService.findRoleById(adminUserParam);
+    }
+
+    @RequestMapping(value = "role/update")
+    public CallResult updateRole(@RequestBody AdminUserParam adminUserParam){
+        return adminUserService.updateRole(adminUserParam);
+    }
+
     @RequestMapping(value = "permission/findPermissionPage")
     public CallResult findPermissionPage(@RequestBody AdminUserParam adminUserParam){
         return adminUserService.findPermissionPage(adminUserParam);
+    }
+
+    @RequestMapping(value = "permission/add")
+    public CallResult addPermission(@RequestBody AdminUserParam adminUserParam){
+        return adminUserService.addPermission(adminUserParam);
+    }
+
+    @RequestMapping(value = "permission/findPermissionById")
+    public CallResult findPermissionById(@RequestBody AdminUserParam adminUserParam){
+        return adminUserService.findPermissionById(adminUserParam);
     }
 
     @RequestMapping(value = "permission/update")
@@ -46,8 +71,10 @@ public class AdminUserController {
     public CallResult findPage(@RequestBody AdminUserParam adminUserParam){
         return adminUserService.findPage(adminUserParam);
     }
-
-    //新增用户
+    @RequestMapping(value = "role/all")
+    public CallResult roleAll(){
+        return adminUserService.roleAll();
+    }
     @RequestMapping(value = "add")
     public CallResult add(@RequestBody AdminUserParam adminUserParam){
         return adminUserService.addUser(adminUserParam);

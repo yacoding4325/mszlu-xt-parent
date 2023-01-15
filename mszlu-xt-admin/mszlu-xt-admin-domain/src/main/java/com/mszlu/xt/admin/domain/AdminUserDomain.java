@@ -250,4 +250,56 @@ public class AdminUserDomain {
         return adminMenuModelList;
     }
 
+    public CallResult<Object> add() {
+        AdminRole role = new AdminRole();
+        BeanUtils.copyProperties(this.adminUserParam,role);
+        List<Integer> permissionIdList = this.adminUserParam.getPermissionIdList();
+        this.adminUserDomainRepository.saveRole(role);
+        Integer roleId = role.getId();
+        this.adminUserDomainRepository.saveRolePermission(roleId,permissionIdList);
+        return CallResult.success();
+    }
+
+    public CallResult<Object> findRoleById() {
+        Integer roleId = this.adminUserParam.getRoleId();
+        //查询角色
+        AdminRole role = this.adminUserDomainRepository.findRoleId(roleId);
+        //根据id查询选中的权限id列表
+        List<Integer> permissionIdList = this.adminUserDomainRepository.findPermissionIdListByRoleId(roleId);
+        Map<String,Object> result = new HashMap<>();
+        result.put("role",role);
+        result.put("permissionIdList",permissionIdList);
+        return CallResult.success(result);
+    }
+
+    public CallResult<Object> updateRole() {
+        AdminRole role = new AdminRole();
+        BeanUtils.copyProperties(this.adminUserParam,role);
+        role.setId(this.adminUserParam.getRoleId());
+        List<Integer> permissionIdList = this.adminUserParam.getPermissionIdList();
+        this.adminUserDomainRepository.updateRole(role);
+        Integer roleId = role.getId();
+        //先删除关联关系
+        this.adminUserDomainRepository.deleteRolePermissionByRoleId(roleId);
+        this.adminUserDomainRepository.saveRolePermission(roleId,permissionIdList);
+        return CallResult.success();
+    }
+
+    public CallResult<Object> addPermission() {
+        AdminPermission adminPermission = new AdminPermission();
+        BeanUtils.copyProperties(adminUserParam,adminPermission);
+        this.adminUserDomainRepository.savePermission(adminPermission);
+        return CallResult.success();
+    }
+
+    public CallResult<Object> findPermissionById() {
+        Integer permissionId = this.adminUserParam.getPermissionId();
+        AdminPermission adminPermission = this.adminUserDomainRepository.findPermissionById(permissionId);
+        return CallResult.success(adminPermission);
+    }
+
+    public CallResult<Object> roleAll() {
+        List<AdminRole> adminRoleList = this.adminUserDomainRepository.findAllRole();
+        return CallResult.success(adminRoleList);
+    }
 }

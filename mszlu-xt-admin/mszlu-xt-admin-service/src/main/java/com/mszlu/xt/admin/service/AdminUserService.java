@@ -93,4 +93,42 @@ public interface AdminUserService {
     //获取菜单列表
     CallResult userMenuList(AdminUserParam adminUserParam);
 
+    /**
+     * 角色添加
+     * @param adminUserParam
+     * @return
+     */
+    CallResult add(AdminUserParam adminUserParam);
+
+
+    /**
+     * 查到角色
+     * @param adminUserParam
+     * @return
+     */
+    CallResult findRoleById(AdminUserParam adminUserParam);
+
+    /**
+     * 编辑
+     * @param adminUserParam
+     * @return
+     */
+    CallResult updateRole(AdminUserParam adminUserParam);
+
+    /**
+     * 增加权限
+     * @param adminUserParam
+     * @return
+     */
+    CallResult addPermission(AdminUserParam adminUserParam);
+
+    /**
+     *
+     * @param adminUserParam
+     * @return
+     */
+    CallResult findPermissionById(AdminUserParam adminUserParam);
+
+    CallResult roleAll();
+
 }

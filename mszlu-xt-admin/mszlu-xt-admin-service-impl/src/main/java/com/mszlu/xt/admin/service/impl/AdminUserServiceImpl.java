@@ -198,4 +198,76 @@ public class AdminUserServiceImpl  extends  AbstractService implements AdminUser
         });
     }
 
+    @Override
+    @Transactional
+    public CallResult add(AdminUserParam adminUserParam) {
+        AdminUserDomain adminUserDomain = this.adminUserDomainRepository.createDomain(adminUserParam);
+        return this.serviceTemplate.execute(new AbstractTemplateAction<Object>() {
+            @Override
+            public CallResult<Object> doAction() {
+                return adminUserDomain.add();
+            }
+        });
+    }
+
+    @Override
+    public CallResult findRoleById(AdminUserParam adminUserParam) {
+        AdminUserDomain adminUserDomain = this.adminUserDomainRepository.createDomain(adminUserParam);
+        return this.serviceTemplate.executeQuery(new AbstractTemplateAction<Object>() {
+            @Override
+            public CallResult<Object> doAction() {
+                return adminUserDomain.findRoleById();
+            }
+        });
+    }
+
+    @Override
+    @Transactional
+    public CallResult updateRole(AdminUserParam adminUserParam) {
+        AdminUserDomain adminUserDomain = this.adminUserDomainRepository.createDomain(adminUserParam);
+        return this.serviceTemplate.execute(new AbstractTemplateAction<Object>() {
+            @Override
+            public CallResult<Object> doAction() {
+                return adminUserDomain.updateRole();
+            }
+        });
+    }
+
+    @Override
+    public CallResult addPermission(AdminUserParam adminUserParam) {
+        AdminUserDomain adminUserDomain = this.adminUserDomainRepository.createDomain(adminUserParam);
+        return this.serviceTemplate.execute(new AbstractTemplateAction<Object>() {
+            //            @Override
+//            public CallResult<Object> checkParam() {
+//                return super.checkParam();
+//            }
+            @Override
+            public CallResult<Object> doAction() {
+                return adminUserDomain.addPermission();
+            }
+        });
+    }
+
+    @Override
+    public CallResult findPermissionById(AdminUserParam adminUserParam) {
+        AdminUserDomain adminUserDomain = this.adminUserDomainRepository.createDomain(adminUserParam);
+        return this.serviceTemplate.executeQuery(new AbstractTemplateAction<Object>() {
+            @Override
+            public CallResult<Object> doAction() {
+                return adminUserDomain.findPermissionById();
+            }
+        });
+    }
+
+    @Override
+    public CallResult roleAll() {
+        AdminUserDomain adminUserDomain = this.adminUserDomainRepository.createDomain(null);
+        return this.serviceTemplate.executeQuery(new AbstractTemplateAction<Object>() {
+            @Override
+            public CallResult<Object> doAction() {
+                return adminUserDomain.roleAll();
+            }
+        });
+    }
+
 }

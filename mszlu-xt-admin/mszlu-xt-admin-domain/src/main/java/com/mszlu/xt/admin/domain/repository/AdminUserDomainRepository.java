@@ -160,4 +160,49 @@ public class AdminUserDomainRepository {
         return adminMenuMapper.selectList(queryWrapper1);
     }
 
+    public void saveRole(AdminRole role) {
+        this.adminRoleMapper.insert(role);
+    }
+
+    public void saveRolePermission(Integer roleId, List<Integer> permissionIdList) {
+        for (Integer permissionId : permissionIdList) {
+            AdminRolePermission adminRolePermission = new AdminRolePermission();
+            adminRolePermission.setRoleId(roleId);
+            adminRolePermission.setPermissionId(permissionId);
+            this.adminRolePermissionMapper.insert(adminRolePermission);
+        }
+    }
+
+    public AdminRole findRoleId(Integer roleId) {
+        return adminRoleMapper.selectById(roleId);
+    }
+
+    public List<Integer> findPermissionIdListByRoleId(Integer roleId) {
+        LambdaQueryWrapper<AdminRolePermission> queryWrapper = Wrappers.lambdaQuery();
+        queryWrapper.eq(AdminRolePermission::getRoleId,roleId);
+        return adminRolePermissionMapper.selectList(queryWrapper).stream().map(AdminRolePermission::getPermissionId).collect(Collectors.toList());
+    }
+
+    public void updateRole(AdminRole role) {
+        this.adminRoleMapper.updateById(role);
+    }
+
+    public void deleteRolePermissionByRoleId(Integer roleId) {
+        LambdaQueryWrapper<AdminRolePermission> queryWrapper = Wrappers.lambdaQuery();
+        queryWrapper.eq(AdminRolePermission::getRoleId,roleId);
+        this.adminRolePermissionMapper.delete(queryWrapper);
+    }
+
+    public void savePermission(AdminPermission adminPermission) {
+        adminPermissionMapper.insert(adminPermission);
+    }
+
+    public AdminPermission findPermissionById(Integer permissionId) {
+        return adminPermissionMapper.selectById(permissionId);
+    }
+
+    public List<AdminRole> findAllRole() {
+        return adminRoleMapper.selectList(Wrappers.lambdaQuery());
+    }
+
 }
