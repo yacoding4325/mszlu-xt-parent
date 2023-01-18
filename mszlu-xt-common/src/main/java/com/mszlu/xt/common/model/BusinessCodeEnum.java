@@ -3,9 +3,7 @@ package com.mszlu.xt.common.model;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * @author Jarno
- */
+
 public enum BusinessCodeEnum {
     /**
      * 码样式：【CCCBBOOXXX】

@@ -3,9 +3,6 @@ package com.mszlu.xt.common.service;
 
 import com.mszlu.xt.common.model.CallResult;
 
-/**
- * @author Jarno
- */
 public abstract class AbstractTemplateAction<T> implements TemplateAction<T> {
     @Override
     public CallResult<T> checkParam() {

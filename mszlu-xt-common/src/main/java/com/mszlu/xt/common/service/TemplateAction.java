@@ -3,9 +3,7 @@ package com.mszlu.xt.common.service;
 
 import com.mszlu.xt.common.model.CallResult;
 
-/**
- * @author Jarno
- */
+
 public interface TemplateAction<T> {
     //第一步 检查参数
     CallResult<T> checkParam();

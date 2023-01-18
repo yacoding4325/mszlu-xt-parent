@@ -3,9 +3,7 @@ package com.mszlu.xt.common.enums;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * @author Jarno
- */
+
 public enum Status {
     /**
      * look name

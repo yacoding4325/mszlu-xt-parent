@@ -4,7 +4,6 @@ public class UserThreadLocal {
 
     private static final ThreadLocal<Long> LOCAL = new ThreadLocal<>();
 
-
     public static void put(Long userId){
         LOCAL.set(userId);
     }
